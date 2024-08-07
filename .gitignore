@@ -1,0 +1,5 @@
+# Ignore the .vscode directory
+.vscode/
+
+# Ignore the .namlVenv virtual environment directory
+.namlVenv/
