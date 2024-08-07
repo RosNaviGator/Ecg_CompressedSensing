@@ -2,6 +2,10 @@
 
 **Date:** August 7, 2024
 
+**Author:** Francesco Rosnati  
+**Course:** Numerical Analysis for Machine Learning - Professor Edie Miglio - Politecnico di Milano
+
+
 ## Project Overview
 
 This project aims to develop a Python software for ECG data processing, compression, and reconstruction using both non-CS-based and CS-based methods. The software will include modules for data reading, visualization, structuring, compression, reconstruction, and evaluation. Currently, the project is in its conceptual stage, and the initial planning documents have been created.
