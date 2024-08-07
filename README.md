@@ -5,6 +5,10 @@
 **Author:** Francesco Rosnati  
 **Course:** Numerical Analysis for Machine Learning - Professor Edie Miglio - Politecnico di Milano
 
+<div style="text-align: center;">
+    <img src="./.img/Fig-3-ECG.jpg" alt="ECG graph" width="600">
+</div>
+
 
 ## Project Overview
 
