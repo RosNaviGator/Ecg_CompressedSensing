@@ -1,0 +1,32 @@
+Date: 2024-08-09 17:18:14
+
+Package             Version
+------------------- -----------
+certifi             2024.7.4
+cffi                1.17.0
+charset-normalizer  3.3.2
+contourpy           1.1.1
+cycler              0.12.1
+fonttools           4.53.1
+idna                3.7
+importlib_resources 6.4.0
+kiwisolver          1.4.5
+matplotlib          3.7.5
+numpy               1.24.4
+packaging           24.1
+pandas              2.0.3
+pillow              10.4.0
+pip                 23.0.1
+pycparser           2.22
+pyparsing           3.1.2
+python-dateutil     2.9.0.post0
+pytz                2024.1
+requests            2.32.3
+scipy               1.10.1
+setuptools          56.0.0
+six                 1.16.0
+soundfile           0.12.1
+tzdata              2024.1
+urllib3             2.2.2
+wfdb                4.1.2
+zipp                3.19.2
