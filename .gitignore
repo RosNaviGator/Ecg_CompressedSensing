@@ -3,3 +3,6 @@
 
 # Ignore the .namlVenv virtual environment directory
 .namlVenv/
+
+# Ignore dataset
+physionet.org/
