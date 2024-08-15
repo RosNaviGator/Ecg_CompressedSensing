@@ -27,5 +27,7 @@
 ### Step 2: measurement matrix
 ### Step 3: concatenating compressed blocks
 
+## PART VI: adaptive dictionary learning
 
+## PART VII: recovery of signal
 
