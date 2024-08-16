@@ -1,5 +1,8 @@
 # TO DO LIST
 
+## During SAMPLING PHASE
+- Ideally $\Phi$, $\Psi$ are created beforehands in the __Pre-sampling phase__. In the moment in which we take the sample the block dimension must be coherent, so we have to either _enforce_ the dimension of the matrix as block size, or check that it's been chosen correctly
+
 ## DO not forget at the end ...
 - `pip freze > requirements.txt` to generate req list at the end
 - `python --version > py_version.txt` to tell which version of python was employed
