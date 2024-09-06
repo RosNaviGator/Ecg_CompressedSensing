@@ -1,0 +1,146 @@
+I want to write a class 'compressedSensing' in python:
+
+class should basically be able to do following:
+
+can be given and make attributes
+- test set (signal)
+- optionally a training set
+
+Will always happen:
+- test set will be compressed sensed always, this means in particular
+that we will generate a measurement matrix, the class should ask what type of 
+matrix to use with a string then use one of these two:
+
+import numpy as np
+
+def generate_DBBD_matrix(M, N):
+    """
+    Generates a deterministic Diagonally Blocked Block Diagonal (DBBD) matrix.
+
+    A DBBD matrix is a type of block diagonal matrix where each block is a square diagonal matrix.
+
+    Parameters
+    ----------
+    M : int
+        Number of rows in the matrix.
+    N : int
+        Number of columns in the matrix. Should be a multiple of M.
+
+    Returns
+    -------
+    A : numpy.ndarray
+        The generated DBBD matrix of shape (M, N).
+
+    Raises
+    ------
+    ValueError
+        If `N` is not a multiple of `M`.
+
+    Example
+    -------
+    >>> generate_DBDD_matrix(3, 9)
+    array([[1., 1., 1., 0., 0., 0., 0., 0., 0.],
+           [0., 0., 0., 1., 1., 1., 0., 0., 0.],
+           [0., 0., 0., 0., 0., 0., 1., 1., 1.]])
+    """
+
+
+    if N % M != 0:
+        raise ValueError("N should be a multiple of M.")
+    
+    Phi = np.zeros((M, N))
+    m = N // M
+    
+    for i in range(M):
+        Phi[i, i*m:(i+1)*m] = 1
+
+    return Phi
+
+
+def generate_random_matrix(M, N, matrix_type='gaussian'):
+    """
+    Generates a random matrix based on the specified type.
+
+    Parameters
+    ----------
+    M : int
+        Number of rows in the matrix.
+    N : int
+        Number of columns in the matrix.
+    matrix_type : str, optional (default='gaussian')
+        The type of random matrix to generate. Options are:
+        - 'gaussian': A matrix with entries drawn from a normal distribution scaled by 1/M.
+        - 'scaled_binary': A matrix with binary entries (±0.5), scaled by 1/sqrt(M).
+        - 'unscaled_binary': A matrix with binary entries (±1), with no scaling.
+
+    Returns
+    -------
+    A : numpy.ndarray
+        The generated random matrix of shape (M, N).
+
+    Raises
+    ------
+    ValueError
+        If `matrix_type` is not one of the supported types.
+
+    Example
+    -------
+    >>> generate_random_matrix(2, 3, matrix_type='gaussian')
+    array([[ 0.01, -0.02,  0.03],
+           [-0.04,  0.05, -0.06]])
+
+    >>> generate_random_matrix(2, 3, matrix_type='scaled_binary')
+    array([[-0.5,  0. , -0.5],
+           [ 0.5, -0.5,  0. ]])
+    
+    >>> generate_random_matrix(2, 3, matrix_type='unscaled_binary')
+    array([[ 1., -1.,  1.],
+           [-1.,  1., -1.]])
+    """
+    if matrix_type == 'gaussian':
+        A = ((1/M)**2) * np.random.randn(M, N)
+
+    elif matrix_type == 'scaled_binary':
+        A = np.random.binomial(1, 0.5, size=(M, N)) - 0.5
+        A = (1/np.sqrt(M)) * A
+
+    elif matrix_type == 'unscaled_binary':
+        A = np.random.binomial(1, 0.5, size=(M, N)) * 2 - 1
+
+    else:
+        raise ValueError("Unsupported matrix type. Choose either 'gaussian', 'scaled_binary', or 'unscaled_binary'.")
+
+    return A
+
+
+    then it should compress doing something like this
+    # Sampling Phase
+    Y = np.zeros((M, SIGNAL_BLOCKS))
+    for i in range(len(x) // N):
+
+        Y[:,i] = Phi @ x[i*N:(i+1)*N]
+
+
+
+    both Phi, Y should be stored as attribute and retrievable
+    from the class if the user wants
+
+    I think the constructor should only ask for the signal (equal to the 
+    test set, a BLOCK_LEN which are columns of phi matrix, and a compression retrievable
+    CR to be able to compute COMP_LEN which rows of measurement matrix phi ) 
+
+
+
+    let's start from this I will give you the rest later.
+
+
+    Note: do not copy also the implementation I give you already written by me,
+    just use them, I will define them before the class so 
+    that they can be used
+
+
+    -------------------
+
+
+    now the first and most easy way to rebuild the matrix we will offer
+    is through a dct dictionary 

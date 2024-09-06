@@ -6,3 +6,6 @@
 
 # Ignore dataset
 physionet.org/
+
+# py cache
+__pycache__
