@@ -174,14 +174,14 @@ for rep in range(REPEAT):
 
 
     # deterministic DBBD
-    Phi = mesmat.generate_DBBD_matrix(M, N)
-    PHI_STRING = 'DBBD'
+    #Phi = mesmat.generate_DBBD_matrix(M, N)
+    #PHI_STRING = 'DBBD'
 
     # randomic measurement
-    #if PHI_STRING == 'DBBD':
-    #    raise ValueError('DBBD is already active')
-    #PHI_STRING = 'scaled_binary' # need for print at the end: 'scaled_binary', 'binary', 'gaussian'
-    #Phi = mesmat.generate_random_matrix(M, N, PHI_STRING)
+    if PHI_STRING == 'DBBD':
+        raise ValueError('DBBD is already active')
+    PHI_STRING = 'scaled_binary' # need for print at the end: 'scaled_binary', 'binary', 'gaussian'
+    Phi = mesmat.generate_random_matrix(M, N, PHI_STRING)
 
     ## Create kron measurement matrix
     ## --------------------------------

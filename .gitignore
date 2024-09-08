@@ -9,3 +9,6 @@ physionet.org/
 
 # py cache
 __pycache__
+
+# results.csv
+results.csv
