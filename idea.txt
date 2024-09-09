@@ -11,3 +11,65 @@ When we build with recovery_only we still need to be imposssible to do compress_
 Note that inserting BLOCK_LEN, CR=4, matrix_type='gaussian', when instantiating feeding the model, such parameters are useless, so first of all we should put a default for BLOCK_LEN (16), also we should perform a check if when launched in the recovery_only mode, if the BLOCK_LEN doesn't coincide with the len of phi in non_kron case, original_phi in kron case then we should raise error stating that that three parameters are not to be used when recovery only is on
 
 2. In order for this to be possible it is necessary that when we run the first time to output the model, the model it's created in consistent way with what we said, so basically: if we never kronecker_activate then at the end we must be able to extract an object that contains phi, dict, kron flag to false, original_phi=None. If we did kronecker: phi, dict, kron flag to true, original_phi.
+
+
+
+Too much of a mess, let's divide in two classes...
+
+The firs class will be as the orignal one was: no recovery_only mode, just plain and simple old style instantiation where we give signal, BLOCK_LEN=16, CR=4, matrix_type='gaussian' as arguments.  We perfom check and then only "normal mode", similarly to what follwos, correct accordingly:
+
+def __init__(self, signal, BLOCK_LEN=16, CR=4, matrix_type='gaussian', model=None, recovery_only=False):
+        """
+        Constructor for the compressedSensing class.
+
+        Parameters:
+        -----------
+        signal : numpy.ndarray
+            The input signal, must be a valid array of real numbers.
+        BLOCK_LEN : int
+            The number of rows in the measurement matrix Phi. Default is 16.
+        CR : int, optional (default=4)
+            Compression ratio (controls the number of rows in Phi). Must be a positive integer and BLOCK_LEN / CR > 1.
+        matrix_type : str, optional (default='gaussian')
+            Type of the matrix to generate ('gaussian', 'DBBD', etc.).
+        model : dict, optional
+            A model containing 'phi', 'dict', 'is_kron', and optionally 'original_phi' if Kronecker compression was used.
+        recovery_only : bool, optional (default=False)
+            If True, skips training and focuses only on signal recovery using the pre-provided model.
+        """
+        
+        # Check if signal is valid
+        if signal is None:
+            raise ValueError("A signal must be provided.")
+        
+        # Ensure signal is a vector-like structure (array or list of real numbers)
+        if not (isinstance(signal, (list, np.ndarray)) and np.issubdtype(np.array(signal).dtype, np.number)):
+            raise ValueError("The signal must be a valid array or list of numerical values.")
+        
+        self.signal = np.array(signal)  # Convert to numpy array if it isn't already
+        self.recovery_only = recovery_only
+
+            # In normal mode
+            self.BLOCK_LEN = BLOCK_LEN
+            self.CR = CR
+            self.COMP_LEN = BLOCK_LEN // CR  # Compression length (number of rows in Phi)
+
+            # Generate measurement matrix Phi based on the specified type
+            if matrix_type == 'DBBD':
+                self.Phi = generate_DBBD_matrix(self.COMP_LEN, self.BLOCK_LEN)
+            else:
+                self.Phi = generate_random_matrix(self.COMP_LEN, self.BLOCK_LEN, matrix_type=matrix_type)
+        
+        # Initialize other attributes
+        self.training_set = None
+        self.training_matrix = None
+        self.reconstructed_signal = None
+        self.Y = None  # Compressed test signal
+        self.theta = None
+        self.theta_pinv = None
+        self.coeff_matrix = None  # Coefficients from MOD or K-SVD algorithm
+
+Afetr instantiation we have that can be called: divide_signal,  compress_test_set, kronecker_activate, generate_dictionary, recover_signal, and the final plotter, also we have all the function to recover attributes and the function to recover the model.
+
+We will later generate a class to use the model
+
