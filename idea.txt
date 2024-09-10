@@ -73,3 +73,65 @@ Afetr instantiation we have that can be called: divide_signal,  compress_test_se
 
 We will later generate a class to use the model
 
+
+Class inheritance build
+
+We previously spoke of inheritance, composition, and abstract base classes. For sure we want inheritance, probably with abstract classes.
+I will now explain myself.
+
+we should have base class, then two subclasses: normal and recovery only
+Normal should perform what it does now, but some methods will be derived from base class, some overwritten, some added.
+Same goes with the one we have to create: the recovery only one.
+
+divide_signal should exist only in normal version.
+
+compress_test_set exists in both it should be inherited from base class cause they can use it the same.
+
+Y_kron should exist the same for both, inherited from base class
+
+kronecker_activate should exist in both,b ut it;s different! The version in normal calss should be:
+def kronecker_activate(self, KRON_FACT):
+        """
+        Activates Kronecker compression, adjusting BLOCK_LEN and reprocessing Phi and Y accordingly.
+        """
+        if hasattr(self, 'is_kron') and self.is_kron:
+            raise ValueError("Kronecker compression has already been activated. Cannot activate again.")
+
+        if self.Y is None:
+            raise ValueError("Y has not been computed. Please compress the signal before activating the kronecker method.")
+        
+        self.KRON_FACT = KRON_FACT
+        self.BLOCK_LEN = self.BLOCK_LEN * self.KRON_FACT
+
+        # Compute Kronecker product for Phi
+        self.Phi = np.kron(np.eye(self.KRON_FACT), self.Phi)
+
+        # Reprocess the training set if it exists
+        if self.training_set is not None:
+            training_size = len(self.training_set)
+            num_cols = training_size // self.BLOCK_LEN
+            if num_cols < self.BLOCK_LEN:
+                warnings.warn("The number of samples (columns) in the training matrix is shorter than "
+                            "the number of rows, which can cause issues with dictionary learning.")
+            
+            self.training_matrix = self.training_set[:num_cols * self.BLOCK_LEN].reshape(self.BLOCK_LEN, num_cols, order='F')
+        
+        self.Y_kron()
+
+        # Set the is_kron flag to True
+        self.is_kron = True
+
+While the version in recovery only shoudn't have the part where: # Reprocess the training set if it exists. Also we have to expan with kronecker product not only phi with self.Phi = np.kron(np.eye(self.KRON_FACT), self.Phi), but the same thing has to be made to the dictionary.
+
+geenrate_dictionary should be normal class only
+
+Constructor: each of the two subclasses should have it's own, they work very differently.
+The one in normal class it's already correct.
+
+The one in the recovery only should perform this: accept as argument two things, a signal and the dictionary "model" that comes as output from the other subclass. The signal is immediately put in self.test_set 
+After that it checks if is_kron is true or false, if it is false then phi inside the class gets set to phi in the model, dict to dict in the model, original_phi to original_phi, then call compress_test_set and here it stops (maybe only Initialize all parameters including is_kron to false).
+If is_kron flag in model is true: in the phi inside the class gets set to phi in the model, dict to dict in the model, original_phi to original_phi, compress_test_set is called, then Y_kron is called and the flag self.is_kron is set to true.
+
+You have everything you need to produce the whole thing.
+
+Please put every piece in a different code block
