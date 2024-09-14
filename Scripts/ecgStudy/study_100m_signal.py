@@ -1,15 +1,43 @@
 """
-study_100m_signal.py - Signal Compression and Recovery Analysis using Different Dictionary Learning Techniques
+study_100m_signal.py - Comparative Analysis of Dictionary Learning Techniques for Signal Compression and Recovery
 
-This script performs a comparative analysis of various dictionary learning techniques 
-(Discrete Cosine Transform (DCT), MOD (Method of Optimal Directions), and K-SVD (K-Singular Value Decomposition)) 
-for signal compression and recovery. The signal used is from the MIT-BIH Arrhythmia Database (100m.mat) and the 
-analysis includes standard and Kronecker compression techniques.
+This script performs a comprehensive analysis of various dictionary learning techniques for signal 
+compression and recovery, using the 100m.mat ECG signal from the MIT-BIH Arrhythmia Database. 
+The analysis compares different methods such as the Discrete Cosine Transform (DCT), MOD (Method 
+of Optimal Directions), and K-SVD (K-Singular Value Decomposition), as well as their performance 
+with standard and Kronecker compression techniques.
 
-The results are evaluated using the Signal-to-Noise Ratio (SNR), which is computed for each method. The script 
-supports multiple repetitions of the experiment and, if repetitions > 1, it calculates and visualizes the average, 
-minimum, and maximum SNR values for each method. It also allows customization of key parameters, such as matrix type, 
-training percentage, and SL0 algorithm parameters.
+The effectiveness of each technique is evaluated using the Signal-to-Noise Ratio (SNR), which 
+quantifies the quality of signal recovery. Multiple repetitions of the experiment can be run to 
+compute average, minimum, and maximum SNR values for each method. The script allows the user to 
+customize key parameters such as the measurement matrix type, training percentage, Kronecker factor, 
+and SL0 algorithm parameters.
+
+Outputs will be in (root)/studyOutputs
+
+Supported Dictionaries:
+--------------------------------------
+- DCT (Discrete Cosine Transform)
+- MOD (Method of Optimal Directions)
+- K-SVD (K-Singular Value Decomposition)
+
+Supported Measurement Matrices:
+-------------------------------
+- DBBD (Deterministic Diagonally Blocked Block Diagonal)
+- Gaussian
+- Scaled Binary
+- Unscaled Binary
+
+Compression Methods:
+--------------------
+- Standard compression
+- Kronecker compression (controlled by the KRON_FACT parameter)
+
+Key Features:
+-------------
+- Allows for multiple repetitions of the experiment to assess variability in SNR.
+- Supports visualization of the original vs. reconstructed signals.
+- Outputs average, minimum, and maximum SNR values in both graphical (histogram) and CSV formats.
 
 Parameters
 ----------
@@ -26,19 +54,22 @@ Parameters
 - KRON_FACT : int
     Kronecker factor used for Kronecker compression.
 - mod_params : dict
-    Parameters for the MOD algorithm, including redundancy, number of iterations, initialization method, and the 
-    number of non-zero coefficients.
+    Parameters for the MOD algorithm, including redundancy, number of iterations, initialization method, 
+    and the number of non-zero coefficients.
 - ksvd_params : dict
-    Parameters for the K-SVD algorithm, including redundancy, number of iterations, initialization method, and 
-    the number of non-zero coefficients.
+    Parameters for the K-SVD algorithm, including redundancy, number of iterations, initialization method, 
+    and the number of non-zero coefficients.
 - sl0_params : dict
-    Parameters for the SL0 (Smoothed L0) algorithm, including sigma_min, sigma_decrease_factor, mu_0, number of inner 
-    loop iterations (L), and showProgress toggle.
+    Parameters for the SL0 (Smoothed L0) algorithm, including sigma_min, sigma_decrease_factor, mu_0, number of 
+    inner loop iterations (L), and showProgress toggle.
 
 Usage
 -----
 1. Customize the parameters under the `if __name__ == "__main__":` section to control the experiment settings.
 2. Run the script to execute the analysis and produce results.
+
+Example:
+    $ python study_100m_signal.py
 
 Outputs
 -------
@@ -46,11 +77,6 @@ Outputs
 - If REPS > 1, a histogram of the average, minimum, and maximum SNR values across all repetitions.
 - CSV file containing SNR results for each method.
 - PNG files of histograms and signal comparisons are saved in the (root)/studyOutputs directory.
-
-Example
--------
-To execute the script with default parameters:
-    $ python study_100m_signal.py
 
 """
 
@@ -64,6 +90,7 @@ from CompSensePack import compressedSensing
 
 
 def main(REPS, show_snr_box, matrix_type, training_percentage, signal_duration, mod_params, ksvd_params, sl0_params, KRON_FACT):
+
     # Load the signal using scipy.io (from 100m.mat)
     script_dir = Path(__file__).resolve().parent  # Path to the directory where this script is located
     root_dir = script_dir.parents[1]  # Going two levels up to reach the project root
