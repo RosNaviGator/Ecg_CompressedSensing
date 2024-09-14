@@ -28,6 +28,10 @@ from .dictionaries import (
 # Import SL0 from SL0.py
 from .SL0 import SL0
 
+# Import compressedSensing from comp_sense_class.py
+from .comp_sense_class import compressedSensing
+
+
 
 __all__ = [
     'printFormatted',
