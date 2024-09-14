@@ -25,6 +25,10 @@ from .dictionaries import (
     check_matrix_properties
 )
 
+# Import SL0 from SL0.py
+from .SL0 import SL0
+
+
 __all__ = [
     'printFormatted',
     'py_test_csv',
@@ -45,5 +49,9 @@ __all__ = [
     'compute_independent_columns',
     'check_normalization',
     'compute_coherence',
-    'check_matrix_properties'
+    'check_matrix_properties',
+    # SL0 function
+    'SL0',
+    # compressedSensing class
+    'compressedSensing'
 ]

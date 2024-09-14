@@ -1,6 +1,8 @@
 README.md
 setup.py
+CompSensePack/SL0.py
 CompSensePack/__init__.py
+CompSensePack/compressedSensingClass.py
 CompSensePack/eval.py
 CompSensePack/measurement_matrix.py
 CompSensePack/utils.py

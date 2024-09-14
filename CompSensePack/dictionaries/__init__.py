@@ -1,13 +1,21 @@
-# __init__.py for the dictionaries module in CompSensePack
+"""
+CompSensePack.dictionaries package
 
-from .dct_dictionary import dct_dictionary
+This module contains submodules for dictionary learning algorithms like OMP, MOD, and KSVD.
+
+Submodules:
+- OMP: Orthogonal Matching Pursuit algorithm.
+- MOD: Method of Optimal Directions for dictionary learning.
+- KSVD: K-SVD algorithm for dictionary learning.
+"""
+
 from .OMP import OMP
 from .MOD import MOD, I_findDistanceBetweenDictionaries
 from .KSVD import KSVD, svds_vector, I_findBetterDictionaryElement, I_clearDictionary
+from .dct_dictionary import dct_dictionary
 from .dictionary_utils import compute_independent_columns, check_normalization, compute_coherence, check_matrix_properties
 
 __all__ = [
-    'dct_dictionary',
     'OMP',
     'MOD',
     'I_findDistanceBetweenDictionaries',
@@ -15,6 +23,7 @@ __all__ = [
     'svds_vector',
     'I_findBetterDictionaryElement',
     'I_clearDictionary',
+    'dct_dictionary',
     'compute_independent_columns',
     'check_normalization',
     'compute_coherence',
