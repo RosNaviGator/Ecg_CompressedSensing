@@ -246,8 +246,11 @@ if REPS > 1:
     plt.title(f'Average SNR for {matrix_type} on 100m.mat with Min/Max Values' if show_min_max else f'Average SNR for {matrix_type} on 100m.mat')
     plt.xticks(rotation=45)
 
+
+    # Define the path to the studyOutputs folder relative to the root
+    output_folder = root_dir / 'studyOutputs'
+
     # Ensure the output folder exists
-    output_folder = Path('outputs')
     output_folder.mkdir(parents=True, exist_ok=True)
 
     # Save the plot with the matrix type in the filename
@@ -268,5 +271,5 @@ if REPS > 1:
     }
     results_df = pd.DataFrame(results_data)
     results_df.to_csv(csv_output_file, index=False)
-    
+
     print(f"CSV saved to '{csv_output_file}'")

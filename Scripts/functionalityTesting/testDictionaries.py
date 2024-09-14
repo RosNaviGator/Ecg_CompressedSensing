@@ -1,4 +1,3 @@
-
 # testDictionaries.py - Testing script for the dictionaries module of CompSensePack
 
 import numpy as np
