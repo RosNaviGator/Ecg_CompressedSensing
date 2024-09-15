@@ -32,7 +32,6 @@ from .SL0 import SL0
 from .comp_sense_class import compressedSensing
 
 
-
 __all__ = [
     'printFormatted',
     'py_test_csv',
