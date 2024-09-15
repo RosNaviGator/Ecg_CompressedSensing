@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to CompSensePack’s Documentation! &mdash; Ecg Compressed Sensing with Kronecker Technique &amp; Adaptive Dictionary Learning 0.1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=360bc84d"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CompSensePack Package" href="CompSensePack.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="CompSensePack.html">CompSensePack Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to CompSensePack’s Documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-compsensepacks-documentation">
+<h1>Welcome to CompSensePack’s Documentation!<a class="headerlink" href="#welcome-to-compsensepacks-documentation" title="Link to this heading"></a></h1>
+<section id="project-overview">
+<h2>Project Overview<a class="headerlink" href="#project-overview" title="Link to this heading"></a></h2>
+<p><cite>CompSensePack</cite> is a Python package built to solve problems in compressed sensing, a powerful technique in signal processing. Compressed sensing exploits the fact that many real-world signals can be represented with far fewer samples than what traditional methods require, as long as the signal has an underlying sparse structure. Instead of acquiring a full set of data and then compressing it, compressed sensing allows us to directly acquire the compressed version of the data, leading to faster and more efficient data acquisition, which is particularly valuable in fields like medical imaging, wireless communication, and audio signal processing.</p>
+<p><cite>CompSensePack</cite> at the moment is focalized on <cite>Ecg signals</cite>, it was developed working on the <cite>MIT-BIH Arrhythmia Database</cite>.</p>
+<p>At the heart of compressed sensing is the principle that if a signal is sparse in some basis (for example, in the dct or wavelet domains), it can be reconstructed from a much smaller number of measurements than what traditional Nyquist sampling theory suggests. This is achieved by designing measurement matrices that capture enough information about the signal and applying algorithms to recover the original signal from these compressed measurements.</p>
+</section>
+<section id="compsensepack">
+<h2>CompSensePack<a class="headerlink" href="#compsensepack" title="Link to this heading"></a></h2>
+<p>The library <cite>CompSensePack</cite> attemps to execute the entire ‘pipeline’ of <cite>Compressed Sensing (CS)</cite>: <em>compressed measurement</em> followed by a <em>reconstruction phase</em>.</p>
+<p>The library can simulate a <cite>CS</cite> measurement, it offers various measurement matrices to experiment: deterministic <em>DBBD</em> but also randomly generated <em>gaussian</em> or <em>binary</em> (<em>scaled</em> or <em>unscaled</em>).</p>
+<p>The idea of compress sensing is to re-build the <em>sparse</em> version of the original signal from the <em>compressed measurement</em></p>
+<p>Recovery phase of <cite>CS</cite> has two fundamental components, the first one is the <em>sparsifying dictionary</em>: given that the original natural signal is <em>sparse</em> in some domain, the dictionary is the base of such domain. It’s possible to exploit both <em>fixed dictionaries</em>, like <em>DCT</em> or <em>DWT</em> based ones, or <em>adaptive dictionary learning</em> where the dictionary is learned from a <em>training set</em> to better fit the specific data. The <cite>CompSensePack</cite> offer uses a <em>DCT</em>-based dictionary as a benchmark to test in which case <em>MOD</em> and <em>KSVD</em> adaptive dictionary learning algorithms can (or can’t) perform better than the first.</p>
+<p>The second component of is a <em>recovery method</em>: in order to re-build the sparse solution we need to solve the <em>L0</em> minimization problem, which literally means to find the sparsest solution that verify a given condition. Usually the problem is not possible to solve directly, it is though possible to solve <em>L1</em> minimization problem with same condition, it can be demonstrated that the solutions of the two are approximately the same given the correct conditions. The <cite>CompSensePack</cite> however uses teh <cite>SL0</cite> algorithm that directly approximates the solution of the <em>L0</em> problem.</p>
+</section>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CompSensePack.html">CompSensePack Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CompSensePack.html#main-modules">Main Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SL0.html">SL0 Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html">Evaluation and Plotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="measurement_matrix.html">Measurement Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="comp_sense_class.html">Compressed Sensing Class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CompSensePack.html#dictionaries-subpackage">Dictionaries Subpackage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dictionaries/KSVD.html">KSVD Dictionary Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dictionaries/MOD.html">MOD Dictionary Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dictionaries/OMP.html">OMP Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dictionaries/dct_dictionary.html">DCT Dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dictionaries/dictionary_utils.html">Dictionary Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CompSensePack.html" class="btn btn-neutral float-right" title="CompSensePack Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Francesco Rosnati.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

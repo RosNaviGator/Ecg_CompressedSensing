@@ -11,17 +11,19 @@ jobs:
 
     steps:
     - name: Checkout the code
-      uses: actions/checkout@v3  # Updated to v3
+      uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v3  # Updated to v3
+      uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.x'  # Use your desired Python version
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt  # Ensure sphinx and sphinx_rtd_theme are in requirements.txt
+        pip install -r requirements.txt
+        pip install sphinx
+        pip install sphinx_rtd_theme
 
     - name: Build the documentation
       run: |
@@ -32,6 +34,6 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub Actions automatically provides this
-        publish_dir: ./docs/_build/html  # Path to the built HTML docs
-        publish_branch: gh-pages
-        keep_files: false
+        publish_dir: docs/build/html  # Path to the built HTML docs
+        publish_branch: gh-pages  # Target branch for GitHub Pages
+        keep_files: false  # Optional: Keep existing files in the branch
