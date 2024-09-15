@@ -6,7 +6,6 @@ certifi==2024.8.30
 cffi==1.17.1
 charset-normalizer==3.3.2
 comm==0.2.2
--e git+ssh://git@github.com/RosNaviGator/NAML_ECG_compressor.git@244db8532a1c3c5405778b22fa13551fcccb2989#egg=CompSensePack
 contourpy==1.2.1
 cycler==0.12.1
 debugpy==1.8.5
