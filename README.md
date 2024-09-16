@@ -155,13 +155,11 @@ python Scripts/ecgStudy/study_100m_signal.py
 python Scripts/ecgStudy/visualize_wfdb_signals.py
 ```
 
----
 
-### Jupyter notebook to run directly on [Google Colab](https://colab.google/)
+### <u>Jupyter notebook to run directly on [Google Colab](https://colab.google/)</u>
 - Just upload on colab the [notebook]. 
 - __Do not use this .ipynb on your machine, as it will clone the repository again!__
 
----
 
 ## Contributing
 
