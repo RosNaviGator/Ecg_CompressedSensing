@@ -10,7 +10,7 @@ __Course:__ Numerical Analysis for Machine Learning at Politecnico di Milano -- 
     <img src="./.img/ECG_wave.jpg" alt="ECG graph" width="600">
 </div>
 
----
+
 ## Overview
 
 This project explores the application of **Compressed Sensing (CS)** techniques to electrocardiogram (ECG) signal processing, specifically leveraging adaptive dictionary learning methods and the Kronecker technique for sparse signal recovery. In particular the goal is to explore soultions that would fit on _portable remote_ Ecg machines which have low computational power and limited storage capacity.
@@ -66,7 +66,7 @@ The **Smoothed L0 (SL0)** algorithm is employed to solve the sparse recovery pro
 ### Kronecker Technique
 The **Kronecker technique** is used in this project to exploit the sparsity structure of the signal. It involves constructing a Kronecker product of smaller measurement matrices, which leads to computational efficiency and better recovery performance in certain scenarios. The project evaluates the performance of the Kronecker technique in conjunction with fixed and adaptive dictionaries.
 
----
+
 ## Code Overview
 
 ### Refer to the [Official Documentation Website](https://rosnavigator.github.io/NAML_ECG_compressor/) for more in depth description.
@@ -116,7 +116,6 @@ Two methods are offered:
 - Instruction to [run in local environment](#run-in-local-environment)
 - Support to easily [run on colab](#jupyter-notebook-to-run-directly-on-google-colab)
 
----
 
 ### Run in local environment
 
@@ -162,13 +161,12 @@ python Scripts/ecgStudy/visualize_wfdb_signals.py
 - Just upload on colab the [notebook]. 
 - __Do not use this .ipynb on your machine, as it will clone the repository again!__
 
-
 ---
+
 ## Contributing
 
 If you'd like to contribute to this project, feel free to open issues and submit pull requests. Any improvements or additional features are welcome.
 
----
 
 ## References
 
