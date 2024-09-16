@@ -9,6 +9,16 @@ for dictionary learning and signal recovery.
 
 Outputs will be in (root)/studyOutputs
 
+USAGE
+-----
+To execute this script, simply run it as a Python script. Modify the parameters in the `if __name__ == "__main__":`
+block to set the desired configuration for the experiment. Ensure that the necessary ECG record files 
+from the MIT-BIH Arrhythmia Database are available for loading.
+
+The script will load the signal, apply the chosen dictionary learning method and measurement matrix, 
+and plot the reconstructed signal along with the original signal for visual comparison.
+
+
 The following dictionaries are supported:
     - DCT (Discrete Cosine Transform)
     - MOD (Method of Optimal Directions)
@@ -43,18 +53,6 @@ ksvd_params : dict
     Parameters for the K-SVD algorithm.
 sl0_params : dict
     Parameters for the SL0 algorithm.
-
-Usage
------
-To execute this script, simply run it as a Python script. Modify the parameters in the `if __name__ == "__main__":`
-block to set the desired configuration for the experiment. Ensure that the necessary ECG record files 
-from the MIT-BIH Arrhythmia Database are available for loading.
-
-Example:
-    python visualize_wfdb_signals.py
-
-The script will load the signal, apply the chosen dictionary learning method and measurement matrix, 
-and plot the reconstructed signal along with the original signal for visual comparison.
 
 Dependencies
 ------------

@@ -114,7 +114,9 @@ _Debug_ scripts to test single modules
 
 Two methods are offered:
 - Instruction to [run in local environment](#run-in-local-environment)
-- Support to easily [run on colab]
+- Support to easily [run on colab](#jupyter-notebook-to-run-directly-on-google-colab)
+
+---
 
 ### Run in local environment
 
@@ -142,18 +144,24 @@ pip install .
 __Run from the _root_ directory of the project!__
 
 #### Methods efficiency comparison
-Test the various _measurement matrices_, _dictionaries_, _Kronecker technique_, and so on. __Change the parameters__ at the bottom of the [script](./Scripts/ecgStudy/study_100m_signal.py) in the `__main__`, feel free to experiment. It works with a single _record_, which is contained in [data](./data/) directory.
+- Test the various _measurement matrices_, _dictionaries_, _Kronecker technique_, and so on.
+- [Change the parameters at the bottom of the script](./Scripts/ecgStudy/study_100m_signal.py) in the `__main__`, feel free to experiment. It works with a single _record_, which is contained in [data](./data/) directory.
 ```bash
 python Scripts/ecgStudy/study_100m_signal.py
 ``` 
 #### Visualize recontructed signal
-This script will process the signals and plot reconstructed version over the original. It's possible to download any record of the [MIT-BIH Arrhythmia Database](https://physionet.org/content/mitdb/1.0.0/) available through the [wfdb](https://wfdb.readthedocs.io/en/latest/) library. [Feel free to change parameters](./Scripts/ecgStudy/visualize_wfdb_signals.py).
+- This script will process the signals and plot reconstructed version over the original. It's possible to download any record of the [MIT-BIH Arrhythmia Database](https://physionet.org/content/mitdb/1.0.0/) available through the [wfdb](https://wfdb.readthedocs.io/en/latest/) library.
+- [Feel free to change parameters](./Scripts/ecgStudy/visualize_wfdb_signals.py).
 ```bash
 python Scripts/ecgStudy/visualize_wfdb_signals.py
 ```
-### 4. Documentation
 
-For more detailed information on the available functions, classes, and modules, you can refer to the full [documentation website](https://rosnavigator.github.io/NAML_ECG_compressor/).
+---
+
+### Jupyter notebook to run directly on [Google Colab](https://colab.google/)
+- Just upload on colab the [notebook]. 
+- __Do not use this .ipynb on your machine, as it will clone the repository again!__
+
 
 ---
 ## Contributing
