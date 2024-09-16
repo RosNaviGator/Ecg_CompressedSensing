@@ -20,31 +20,31 @@ The goal of this project is to apply compressed sensing to ECG data and investig
 
 ### Compressed Sensing
 
-Compressed Sensing is a method that exploits the sparsity of signals to enable recovery from fewer measurements than what classical Nyquist sampling theory requires. In essence, CS leverages the fact that many real-world signals ($ x $) are sparse when represented in certain domains (e.g., frequency domain). Sparsity means that in such domain the signal can be represented with only a few non-zero coefficients, the _dictionary_ $\Psi$ can be seen as the tranformation that maps the real signal to it's sparse counterpart: $ x = \Psi s $, where $ s $ is the sparse version.
+Compressed Sensing is a method that exploits the sparsity of signals to enable recovery from fewer measurements than what classical Nyquist sampling theory requires. In essence, CS leverages the fact that many real-world signals ($`x`$) are sparse when represented in certain domains (e.g., frequency domain). Sparsity means that in such domain the signal can be represented with only a few non-zero coefficients, the _dictionary_ $`\Psi`$ can be seen as the tranformation that maps the real signal to it's sparse counterpart: $`x = \Psi s`$, where $`s`$ is the sparse version.
 
-Given a sparse signal $ x $, we can acquire compressed measurements $ y $ by multiplying $ x $ with a measurement matrix: $ y = \Phi x $
+Given a sparse signal $`x`$, we can acquire compressed measurements $`y`$ by multiplying $`x`$ with a measurement matrix: $`y = \Phi x`$
 
-Compressed sensing aims to recover $ x $ from the compressed measurements $ y $. The goal is to find the __sparsest__ vector $s$ that is consistent with:
+Compressed sensing aims to recover $`x`$ from the compressed measurements $`y`$. The goal is to find the __sparsest__ vector $`s`$ that is consistent with:
 
 $$
 y = \Phi x = \Phi \Psi s
 $$
 
-- $x \in \mathbb{R}^n$ _real_ signal coming from sensors
-- $y \in \mathbb{R}^m$ _compressed measurement_
-- $\Psi \in \mathbb{R}^{n \times n}$ is the _dictionary_ (same as explained in previous section)
-- $\Phi \in \mathbb{R}^{m \times n}$ with $m \ll n$ is the _measurement matrix_.
-- $s \in \mathbb{R}^n$ is the _sparse representation_ of $x$ in $\Psi$
+- $`x \in \mathbb{R}^n`$ _real_ signal coming from sensors
+- $`y \in \mathbb{R}^m`$ _compressed measurement_
+- $`\Psi \in \mathbb{R}^{n \times n}`$ is the _dictionary_ (same as explained in previous section)
+- $`\Phi \in \mathbb{R}^{m \times n}`$ with $m \ll n$ is the _measurement matrix_.
+- $`s \in \mathbb{R}^n`$ is the _sparse representation_ of $x$ in $\Psi$
 
-Such system of equations is __under-determined__ since there are infinitely many consistent solution $s$. The __sparsest solution__ is the one that satisfies:
+Such system of equations is __under-determined__ since there are infinitely many consistent solution $`s`$. The __sparsest solution__ is the one that satisfies:
 
 $$
 \hat{s} = \arg_{s} \min \|s\|_0 \text{ subject to } y = \Phi \Psi \alpha
 $$
 
-where $\min \|s\|_0$ denotes the $\ell_0$-pseudo-norm, given by the _non-zero entries_, also referred as the _cardinality_ of $s$.
+where $`\min \|s\|_0`$ denotes the $`\ell_0`$-pseudo-norm, given by the _non-zero entries_, also referred as the _cardinality_ of $`s`$.
 
-The optimization is non-convex, and in general, the solution can only be found with a brute-force search that is combinatorial in $n$ and $K$. In particular, all possible $K$-sparse vectors in $\mathbb{R}^n$ must be checked; if the exact level of sparsity $K$ is unknown, the search is even broader. Because this search is combinatorial, solving such minimization is intractable for even moderately large $n$ and $K$, and the prospect of solving larger problems does not improve with Moore’s law of exponentially increasing computational power.
+The optimization is non-convex, and in general, the solution can only be found with a brute-force search that is combinatorial in $`n`$ and $`K`$. In particular, all possible $`K`$-sparse vectors in $`\mathbb{R}^n`$ must be checked; if the exact level of sparsity $`K`$ is unknown, the search is even broader. Because this search is combinatorial, solving such minimization is intractable for even moderately large $`n`$ and $`K`$, and the prospect of solving larger problems does not improve with Moore’s law of exponentially increasing computational power.
 
 ### Measurement matrix
 In the present project different _measurement matrices_ are explored: deterministic _DBBD_ (deterministic binary block diagonal) and _randomic_ gaussian or binary (binary both normalized and not). The idea is to test which dictionaries work best on a given the given measurement matrices.
