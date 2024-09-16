@@ -2,7 +2,7 @@
 .vscode/
 
 # Ignore the .namlVenv virtual environment directory
-.namlVenv/
+*venv*
 
 # py cache
 __pycache__
@@ -12,3 +12,7 @@ results.csv
 
 # egg-info
 CompSensePack.egg-info
+
+# ignore any build
+build/
+docs/build/

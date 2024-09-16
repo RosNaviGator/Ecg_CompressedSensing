@@ -15,6 +15,22 @@ and SL0 algorithm parameters.
 
 Outputs will be in (root)/studyOutputs
 
+
+USAGE:
+-----
+1. Customize the parameters under the `if __name__ == "__main__":` section to control the experiment settings.
+2. Run the script to execute the analysis and produce results.
+
+OUTPUTS
+-------
+- Plots of reconstructed vs original signals for each method (DCT, MOD, K-SVD) with and without Kronecker compression.
+- If REPS > 1, a histogram of the average, minimum, and maximum SNR values across all repetitions.
+- CSV file containing SNR results for each method.
+- PNG files of histograms and signal comparisons are saved in the (root)/studyOutputs directory.
+
+
+
+
 Supported Dictionaries:
 --------------------------------------
 - DCT (Discrete Cosine Transform)
@@ -62,21 +78,6 @@ Parameters
 - sl0_params : dict
     Parameters for the SL0 (Smoothed L0) algorithm, including sigma_min, sigma_decrease_factor, mu_0, number of 
     inner loop iterations (L), and showProgress toggle.
-
-Usage
------
-1. Customize the parameters under the `if __name__ == "__main__":` section to control the experiment settings.
-2. Run the script to execute the analysis and produce results.
-
-Example:
-    $ python study_100m_signal.py
-
-Outputs
--------
-- Plots of reconstructed vs original signals for each method (DCT, MOD, K-SVD) with and without Kronecker compression.
-- If REPS > 1, a histogram of the average, minimum, and maximum SNR values across all repetitions.
-- CSV file containing SNR results for each method.
-- PNG files of histograms and signal comparisons are saved in the (root)/studyOutputs directory.
 
 """
 

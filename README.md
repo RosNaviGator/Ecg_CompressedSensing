@@ -10,9 +10,13 @@ __Course:__ Numerical Analysis for Machine Learning at Politecnico di Milano -- 
     <img src="./.img/ECG_wave.jpg" alt="ECG graph" width="600">
 </div>
 
+---
 ## Overview
 
 This project explores the application of **Compressed Sensing (CS)** techniques to electrocardiogram (ECG) signal processing, specifically leveraging adaptive dictionary learning methods and the Kronecker technique for sparse signal recovery. In particular the goal is to explore soultions that would fit on _portable remote_ Ecg machines which have low computational power and limited storage capacity.
+
+### Goal
+The goal of this project is to apply compressed sensing to ECG data and investigate the performance of adaptive dictionary learning (MOD and K-SVD) compared to fixed dictionaries (DCT), with and without the Kronecker technique. We aim to determine whether adaptive methods can outperform fixed dictionaries in terms of signal reconstruction quality. In particular it will be tested trying to simulate what would be possible to achieve with a _remote portable_ Ecg machine, such apparatus limits the computational power in measurement phase and has linited torage capabilites. (Recovery is not limited because it doesn't have to happen on-chip, it can be done on more powerful machines in a second moment)
 
 ### Compressed Sensing
 
@@ -62,31 +66,44 @@ The **Smoothed L0 (SL0)** algorithm is employed to solve the sparse recovery pro
 ### Kronecker Technique
 The **Kronecker technique** is used in this project to exploit the sparsity structure of the signal. It involves constructing a Kronecker product of smaller measurement matrices, which leads to computational efficiency and better recovery performance in certain scenarios. The project evaluates the performance of the Kronecker technique in conjunction with fixed and adaptive dictionaries.
 
-### Goal
-The goal of this project is to apply compressed sensing to ECG data and investigate the performance of adaptive dictionary learning (MOD and K-SVD) compared to fixed dictionaries (DCT), with and without the Kronecker technique. We aim to determine whether adaptive methods can outperform fixed dictionaries in terms of signal reconstruction quality. In particular it will be tested trying to simulate what would be possible to achieve with a _remote portable_ Ecg machine, such apparatus limits the computational power in measurement phase and has linited torage capabilites. (Recovery is not limited because it doesn't have to happen on-chip, it can be done on more powerful machines in a second moment),
-
-
+---
 ## Code Overview
 
-### CompSensePack
+### Refer to the [Official Documentation Website](https://rosnavigator.github.io/NAML_ECG_compressor/) for more in depth description.
 
-The **CompSensePack** is the core Python package developed for compressive sensing and dictionary learning. It provides functionality for:
-- **Signal Processing**: Tools for dividing, compressing, and reconstructing signals.
-- **Dictionary Learning**: Implements fixed dictionaries (DCT) and adaptive dictionary learning methods (MOD, K-SVD).
-- **SL0 Algorithm**: Used for sparse signal recovery.
-- **Kronecker Technique**: Enables more efficient compression and recovery.
+### [CompSensePack](./CompSensePack/)
 
-Full documentation is available [here](#link-to-documentation).
+The **CompSensePack** package is designed to handle the core tasks of compressed sensing and dictionary learning. It provides modular tools and high-level abstractions for applying compressive sensing techniques to various signals, with a focus on electrocardiogram (ECG) data in this project. The package is divided into two major components: the main package, which handles signal processing, sparse recovery, and general utilities, and the dictionaries subpackage, which is focused on dictionary learning techniques.
 
-### Scripts
+The main package offers a range of modules to perform the following tasks:
+
+- **SL0 Algorithm**
+- **Measurement Matrix Generation**
+- **Utilities**
+- **Evaluation and Plotting**
+- **Compressed Sensing Class**
+
+### Dictionaries Subpackage
+
+The **Dictionaries Subpackage** is a specialized part of the library (it's contained in the _CompSensePack_), dedicated to the generation and learning of dictionaries. Dictionaries are the set of basis functions in which the signal is sparsely represented, and they are central to the performance of compressed sensing. The subpackage offers both fixed dictionaries and adaptive dictionary learning algorithms, enabling flexibility in how the signal is represented and reconstructed.
+
+- **KSVD Dictionary Learning**
+- **MOD Dictionary Learning**
+- **OMP Algorithm**
+- **DCT Dictionary**
+- **Dictionary Utilities**
+
+### [Scripts](./Scripts/)
 
 The **Scripts** directory contains Python scripts to run the experiments and test the package functionality:
 
-- **ecgStudy**:
-  - `study_100m_signal.py`: Applies the compressed sensing techniques (DCT, MOD, K-SVD) to a specific ECG signal from the MIT-BIH Arrhythmia Database (100m.mat), comparing the performance of the different methods.
+#### ecgStudy
+Main experiments runned
+  - `study_100m_signal.py`: Applies the compressed sensing techniques (DCT, MOD, K-SVD) to a specific ECG signal from the MIT-BIH Arrhythmia Database (Record 100), comparing the performance of the different methods.
   - `visualize_wfdb_signals.py`: Allows users to visualize the compressed sensing results on a signal from the MIT-BIH database using different dictionaries and measurement matrices.
 
-- **functionalityTesting**:
+#### functionalityTesting
+_Debug_ scripts to test single modules
   - `testDictionaries.py`: Tests dictionary learning methods like DCT, MOD, and K-SVD.
   - `testEval.py`: Tests evaluation methods for comparing reconstructed signals.
   - `testMeasurementMatrix.py`: Tests different measurement matrices used in compressed sensing.
@@ -95,44 +112,55 @@ The **Scripts** directory contains Python scripts to run the experiments and tes
 
 ## How to Use
 
-### 1. Set Up a Virtual Environment
+Two methods are offered:
+- Instruction to [run in local environment](#run-in-local-environment)
+- Support to easily [run on colab]
 
-Before running the code, create and activate a virtual environment:
+### Run in local environment
 
-# Add code to create and activate the virtual environment
+#### Python3 required
 
-### 2. Install Required Dependencies
+### 1. Set Up a Virtual Environment (optional)
+```bash
+if [[ "$VIRTUAL_ENV" != "" ]]; then
+    # Deactivate any active virtual environment if one exists
+    deactivate
+    # Remove any previous instance of .venvCsp
+rm -r .venvCsp
+fi
+# Create and activate a new virtual environment, ensure 'python' refers to python3
+python -m venv .venvCsp
+source .venvCsp/bin/activate
+```
 
-Install the necessary Python packages by running:
-
-# Add code to install the required dependencies
-
-Make sure all dependencies, including `numpy`, `matplotlib`, `scipy`, and `wfdb`, are installed.
+### 2. Install CompSensePack (it also installs requirements)
+```bash
+pip install .
+```
 
 ### 3. Run the Scripts
+__Run from the _root_ directory of the project!__
 
-You can run the scripts to perform the experiments or test the package's functionality.
-
-#### Example: Running `study_100m_signal.py`
-
-To compare dictionary learning methods on an ECG signal:
-
-# Add the command to run study_100m_signal.py
-
-#### Example: Running `visualize_wfdb_signals.py`
-
-To visualize the compressed sensing performance on a signal from the MIT-BIH Arrhythmia Database:
-
-# Add the command to run visualize_wfdb_signals.py
-
+#### Methods efficiency comparison
+Test the various _measurement matrices_, _dictionaries_, _Kronecker technique_, and so on. __Change the parameters__ at the bottom of the [script](./Scripts/ecgStudy/study_100m_signal.py) in the `__main__`, feel free to experiment. It works with a single _record_, which is contained in [data](./data/) directory.
+```bash
+python Scripts/ecgStudy/study_100m_signal.py
+``` 
+#### Visualize recontructed signal
+This script will process the signals and plot reconstructed version over the original. It's possible to download any record of the [MIT-BIH Arrhythmia Database](https://physionet.org/content/mitdb/1.0.0/) available through the [wfdb](https://wfdb.readthedocs.io/en/latest/) library. [Feel free to change parameters](./Scripts/ecgStudy/visualize_wfdb_signals.py).
+```bash
+python Scripts/ecgStudy/visualize_wfdb_signals.py
+```
 ### 4. Documentation
 
-For more detailed information on the available functions, classes, and modules, you can refer to the full documentation [here](#link-to-documentation).
+For more detailed information on the available functions, classes, and modules, you can refer to the full [documentation website](https://rosnavigator.github.io/NAML_ECG_compressor/).
 
+---
 ## Contributing
 
 If you'd like to contribute to this project, feel free to open issues and submit pull requests. Any improvements or additional features are welcome.
 
 ---
 
-__Note__: The ECG data used in this project is sourced from the [MIT-BIH Arrhythmia Database](https://physionet.org/content/mitdb/1.0.0/), available on PhysioNet.
+## References
+
