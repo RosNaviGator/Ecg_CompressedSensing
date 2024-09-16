@@ -114,9 +114,7 @@ _Debug_ scripts to test single modules
 
 ## How to Use
 
-Two methods are offered:
 - Instruction to [run in local environment](#run-in-local-environment)
-- Support to easily [run on colab](#jupyter-notebook-to-run-directly-on-google-colab)
 
 
 ### Run in local environment
@@ -156,12 +154,6 @@ python Scripts/ecgStudy/study_100m_signal.py
 ```bash
 python Scripts/ecgStudy/visualize_wfdb_signals.py
 ```
-
-
-### Jupyter notebook to run directly on [Google Colab](https://colab.google/)
-- Just upload on colab the [notebook]. 
-- __Do not use this .ipynb on your machine, as it will clone the repository again!__
-
 
 ## Contributing
 
