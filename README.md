@@ -12,19 +12,40 @@ __Course:__ Numerical Analysis for Machine Learning at Politecnico di Milano -- 
 
 ## Overview
 
-This project explores the application of **Compressed Sensing (CS)** techniques to electrocardiogram (ECG) signal processing, specifically leveraging adaptive dictionary learning methods and the Kronecker technique for sparse signal recovery. 
+This project explores the application of **Compressed Sensing (CS)** techniques to electrocardiogram (ECG) signal processing, specifically leveraging adaptive dictionary learning methods and the Kronecker technique for sparse signal recovery. In particular the goal is to explore soultions that would fit on _portable remote_ Ecg machines which have low computational power and limited storage capacity.
 
 ### Compressed Sensing
 
-Compressed Sensing is a method that exploits the sparsity of signals to enable recovery from fewer measurements than what classical Nyquist sampling theory requires. In essence, CS leverages the fact that many real-world signals are sparse when represented in certain domains (e.g., frequency domain). Sparsity means that the signal can be represented with only a few non-zero coefficients in an appropriate dictionary. 
+Compressed Sensing is a method that exploits the sparsity of signals to enable recovery from fewer measurements than what classical Nyquist sampling theory requires. In essence, CS leverages the fact that many real-world signals ($ x $) are sparse when represented in certain domains (e.g., frequency domain). Sparsity means that in such domain the signal can be represented with only a few non-zero coefficients, the _dictionary_ $\Psi$ can be seen as the tranformation that maps the real signal to it's sparse counterpart: $ x = \Psi s $, where $ s $ is the sparse version.
 
-Given a sparse signal $ x $, we can acquire compressed measurements $ y $ by multiplying $ x $ with a measurement matrix $ \Phi $:
-$ y = \Phi x $
+Given a sparse signal $ x $, we can acquire compressed measurements $ y $ by multiplying $ x $ with a measurement matrix: $ y = \Phi x $
 
-The goal is to recover $ x $ from the compressed measurements $ y $. This leads to an optimization problem, which can be solved through various algorithms, such as the **Smoothed L0 (SL0)** algorithm, which is employed in this project.
+Compressed sensing aims to recover $ x $ from the compressed measurements $ y $. The goal is to find the __sparsest__ vector $s$ that is consistent with:
 
-### Sparsity, Dictionaries, and Compressed Measurements
+$$
+y = \Phi x = \Phi \Psi s
+$$
 
+- $x \in \mathbb{R}^n$ _real_ signal coming from sensors
+- $y \in \mathbb{R}^m$ _compressed measurement_
+- $\Psi \in \mathbb{R}^{n \times n}$ is the _dictionary_ (same as explained in previous section)
+- $\Phi \in \mathbb{R}^{m \times n}$ with $m \ll n$ is the _measurement matrix_.
+- $s \in \mathbb{R}^n$ is the _sparse representation_ of $x$ in $\Psi$
+
+Such system of equations is __under-determined__ since there are infinitely many consistent solution $s$. The __sparsest solution__ is the one that satisfies:
+
+$$
+\hat{s} = \arg_{s} \min \|s\|_0 \text{ subject to } y = \Phi \Psi \alpha
+$$
+
+where $\min \|s\|_0$ denotes the $\ell_0$-pseudo-norm, given by the _non-zero entries_, also referred as the _cardinality_ of $s$.
+
+The optimization is non-convex, and in general, the solution can only be found with a brute-force search that is combinatorial in $n$ and $K$. In particular, all possible $K$-sparse vectors in $\mathbb{R}^n$ must be checked; if the exact level of sparsity $K$ is unknown, the search is even broader. Because this search is combinatorial, solving such minimization is intractable for even moderately large $n$ and $K$, and the prospect of solving larger problems does not improve with Moore’s law of exponentially increasing computational power.
+
+### Measurement matrix
+In the present project different _measurement matrices_ are explored: deterministic _DBBD_ (deterministic binary block diagonal) and _randomic_ gaussian or binary (binary both normalized and not). The idea is to test which dictionaries work best on a given the given measurement matrices.
+
+### Dictionaries
 The success of CS hinges on the sparsity of the signal. Sparsity refers to how efficiently a signal can be represented using only a few non-zero coefficients in a dictionary. A **dictionary** is a set of basis functions used to represent the signal in a sparse form. 
 
 There are two types of dictionaries:
@@ -35,17 +56,15 @@ There are two types of dictionaries:
 
 These adaptive methods aim to outperform fixed dictionaries by tailoring the dictionary to the specific signal.
 
-### SL0 Algorithm
-
+### Solve the minimization problem: SL0 Algorithm
 The **Smoothed L0 (SL0)** algorithm is employed to solve the sparse recovery problem. SL0 approximates the L0 norm, which counts the number of non-zero coefficients, with a smooth function. It minimizes this approximation while maintaining accuracy in signal recovery.
 
 ### Kronecker Technique
-
 The **Kronecker technique** is used in this project to exploit the sparsity structure of the signal. It involves constructing a Kronecker product of smaller measurement matrices, which leads to computational efficiency and better recovery performance in certain scenarios. The project evaluates the performance of the Kronecker technique in conjunction with fixed and adaptive dictionaries.
 
 ### Goal
+The goal of this project is to apply compressed sensing to ECG data and investigate the performance of adaptive dictionary learning (MOD and K-SVD) compared to fixed dictionaries (DCT), with and without the Kronecker technique. We aim to determine whether adaptive methods can outperform fixed dictionaries in terms of signal reconstruction quality. In particular it will be tested trying to simulate what would be possible to achieve with a _remote portable_ Ecg machine, such apparatus limits the computational power in measurement phase and has linited torage capabilites. (Recovery is not limited because it doesn't have to happen on-chip, it can be done on more powerful machines in a second moment),
 
-The goal of this project is to apply compressed sensing to ECG data and investigate the performance of adaptive dictionary learning (MOD and K-SVD) compared to fixed dictionaries (DCT), with and without the Kronecker technique. We aim to determine whether adaptive methods can outperform fixed dictionaries in terms of signal reconstruction quality.
 
 ## Code Overview
 

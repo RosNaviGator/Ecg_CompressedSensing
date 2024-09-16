@@ -11,10 +11,10 @@ jobs:
 
     steps:
     - name: Checkout the code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: '3.x'  # Use your desired Python version
 
@@ -37,3 +37,4 @@ jobs:
         publish_dir: docs/build/html  # Path to the built HTML docs
         publish_branch: gh-pages  # Target branch for GitHub Pages
         keep_files: false  # Optional: Keep existing files in the branch
+        force_orphan: true
