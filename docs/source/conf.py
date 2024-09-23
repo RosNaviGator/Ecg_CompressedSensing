@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.abspath('..'))  # This adds the project root
 project = 'Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning'
 copyright = '2024, Francesco Rosnati'
 author = 'Francesco Rosnati'
-release = '0.1.3'
+release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

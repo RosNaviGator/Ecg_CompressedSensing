@@ -89,6 +89,10 @@ def main(record_name, duration_minutes, chosen_method, measurement_matrix, train
     # Compress the test set
     cs.compress_test_set()
 
+    # Activate Kronecker compression with a fixed KRON_FACT of 8
+    KRON_FACT = 8
+    cs.kronecker_activate(KRON_FACT)
+
     # Generate the dictionary based on the chosen method
     if chosen_method == 'DCT':
         cs.generate_dictionary(dictionary_type='dct')
@@ -121,7 +125,7 @@ def main(record_name, duration_minutes, chosen_method, measurement_matrix, train
 
 if __name__ == "__main__":
     # Parameters to set up the experiment
-    record_name = '109'  # Record from MIT-BIH Arrhythmia Database
+    record_name = '100'  # Record from MIT-BIH Arrhythmia Database
     duration_minutes = 2 * 60  # Load 2 hours of signal
     chosen_method = 'KSVD'  # Choose 'DCT', 'MOD', or 'KSVD'
     measurement_matrix = 'unscaled_binary'  # Choose your matrix type ('DBBD', 'gaussian', 'scaled_binary', 'unscaled_binary')

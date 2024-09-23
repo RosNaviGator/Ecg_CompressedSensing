@@ -9,11 +9,12 @@ Modules in the `CompSensePack` **main directory**: *SL0* recovery method module,
 .. toctree::
    :maxdepth: 1
 
+   comp_sense_class
+   
    SL0
    utils
    eval
    measurement_matrix
-   comp_sense_class
 
 Dictionaries Subpackage
 -----------------------

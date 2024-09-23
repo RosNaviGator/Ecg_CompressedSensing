@@ -1,6 +1,12 @@
 Welcome to CompSensePack’s Documentation!
 ==========================================
 
+Author: `Francesco Rosnati <https://github.com/RosNaviGator>`_
+Date: September 2024
+Version: |release|
+
+Repository: `GitHub Repo <https://github.com/RosNaviGator/NAML_ECG_compressor>`_
+
 Project Overview
 ----------------
 

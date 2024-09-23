@@ -153,8 +153,8 @@ def plot_signals(original_signal, reconstructed_signal, snr=None, original_name=
     
     # Create the plot
     plt.figure(figsize=(10, 6))
-    plt.plot(original_signal_section, label=original_name, color='blue', linewidth=1.5)
-    plt.plot(reconstructed_signal_section, label=reconstructed_name, color='red', linestyle='--', linewidth=1.5)
+    plt.plot(original_signal_section, label=original_name, color='#1f77b4', linewidth=1.5)
+    plt.plot(reconstructed_signal_section, label=reconstructed_name, color='#ff7f0e', linestyle='--', linewidth=1.5)
     
     # Title and labels
     plt.title(f"{original_name} vs {reconstructed_name} (Section: {start_pct*100:.1f}% - {num_samples} samples)")

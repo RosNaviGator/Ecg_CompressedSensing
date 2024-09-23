@@ -90,7 +90,7 @@ import scipy.io
 from CompSensePack import compressedSensing
 
 
-def main(REPS, show_snr_box, matrix_type, training_percentage, signal_duration, mod_params, ksvd_params, sl0_params, KRON_FACT):
+def main(REPS, show_snr_box, matrix_type, training_percentage, signal_duration, mod_params, ksvd_params, sl0_params, KRON_FACT, show_min_max_lines):
 
     # Load the signal using scipy.io (from 100m.mat)
     script_dir = Path(__file__).resolve().parent  # Path to the directory where this script is located
@@ -266,17 +266,20 @@ def main(REPS, show_snr_box, matrix_type, training_percentage, signal_duration, 
 
         # Create a bar chart
         plt.figure(figsize=(10, 6))
-        bars = plt.bar(labels, avg_snrs, color='teal')
+        bars = plt.bar(labels, avg_snrs, color='#5b8999')
 
-        for bar, label in zip(bars, labels):
-            method_key = label.split("-")[1].lower()
-            if "kron" in label.lower():
-                method_key += "_kron"
-            min_val = snr_min[method_key]
-            max_val = snr_max[method_key]
-            bar_center = bar.get_x() + bar.get_width() / 2
-            plt.plot([bar_center - bar.get_width()/4, bar_center + bar.get_width()/4], [min_val, min_val], color='red', lw=2)
-            plt.plot([bar_center - bar.get_width()/4, bar_center + bar.get_width()/4], [max_val, max_val], color='lime', lw=2)
+
+        # Add min and max lines if show_min_max_lines is True
+        if show_min_max_lines:
+            for bar, label in zip(bars, labels):
+                method_key = label.split("-")[1].lower()
+                if "kron" in label.lower():
+                    method_key += "_kron"
+                min_val = snr_min[method_key]
+                max_val = snr_max[method_key]
+                bar_center = bar.get_x() + bar.get_width() / 2
+                plt.plot([bar_center - bar.get_width()/4, bar_center + bar.get_width()/4], [min_val, min_val], color='#a85656', lw=2)
+                plt.plot([bar_center - bar.get_width()/4, bar_center + bar.get_width()/4], [max_val, max_val], color='#6c9e8a', lw=2)
 
         plt.xlabel('Methods')
         plt.ylabel('Average SNR (dB)')
@@ -307,15 +310,15 @@ def main(REPS, show_snr_box, matrix_type, training_percentage, signal_duration, 
         print(f"CSV saved to '{csv_output_file}'")
 
 
-
 if __name__ == "__main__":
     # Modify these values to control the execution
-    REPS = 1  # Number of repetitions
+    REPS = 30  # Number of repetitions
     show_snr_box = True  # Toggle SNR box display
-    matrix_type = 'unscaled_binary'  # Matrix type for the measurement matrix
+    matrix_type = 'unscaled_binary'  # Matrix type for the measurement matrix, options: 'DBBD', 'gaussian', 'scaled_binary', 'unscaled_binary'
     training_percentage = 0.45  # Percentage of signal to use for training
     signal_duration = 60 * 2  # Duration of signal in seconds (e.g., 2 minutes)
     KRON_FACT = 8  # Kronecker factor
+    show_min_max_lines = True  # Toggle to show/hide min/max lines on the histogram
 
     # MOD parameters
     mod_params = {
@@ -343,4 +346,4 @@ if __name__ == "__main__":
         'showProgress': False
     }
 
-    main(REPS, show_snr_box, matrix_type, training_percentage, signal_duration, mod_params, ksvd_params, sl0_params, KRON_FACT)
+    main(REPS, show_snr_box, matrix_type, training_percentage, signal_duration, mod_params, ksvd_params, sl0_params, KRON_FACT, show_min_max_lines)

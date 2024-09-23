@@ -15,6 +15,8 @@ __Course:__ Numerical Analysis for Machine Learning at Politecnico di Milano -- 
 
 This project explores the application of **Compressed Sensing (CS)** techniques to electrocardiogram (ECG) signal processing, specifically leveraging adaptive dictionary learning methods and the Kronecker technique for sparse signal recovery. In particular the goal is to explore soultions that would fit on _portable remote_ Ecg machines which have low computational power and limited storage capacity.
 
+### Refer to the [Report](./Others/Report/NAML_report.pdf) for a thorough review of the present study and it's results.
+
 ### Goal
 The goal of this project is to apply compressed sensing to ECG data and investigate the performance of adaptive dictionary learning (MOD and K-SVD) compared to fixed dictionaries (DCT), with and without the Kronecker technique. We aim to determine whether adaptive methods can outperform fixed dictionaries in terms of signal reconstruction quality. In particular it will be tested trying to simulate what would be possible to achieve with a _remote portable_ Ecg machine, such apparatus limits the computational power in measurement phase and has linited torage capabilites. (Recovery is not limited because it doesn't have to happen on-chip, it can be done on more powerful machines in a second moment)
 
@@ -115,7 +117,7 @@ _Debug_ scripts to test single modules
 ## How to Use
 
 - Instruction to [run in local environment](#run-in-local-environment)
-
+- The notebook used during construction of the program is still available [here](Others/.additionalMaterials/buildingProgram.ipynb).
 
 ### Run in local environment
 
