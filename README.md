@@ -124,6 +124,7 @@ _Debug_ scripts to test single modules
 #### Python3 required
 
 ### 1. Set Up a Virtual Environment (optional)
+#### Linux or MacOs (Unix-based)
 ```bash
 if [[ "$VIRTUAL_ENV" != "" ]]; then
     # Deactivate any active virtual environment if one exists
@@ -134,6 +135,17 @@ fi
 # Create and activate a new virtual environment, ensure 'python' refers to python3
 python -m venv .venvCsp
 source .venvCsp/bin/activate
+```
+#### Windows (only Git bash supported for now)
+```bash
+# Deactivate any active virtual environment if one exists (Git Bash syntax)
+if [[ "$VIRTUAL_ENV" != "" ]]; then
+    deactivate
+    rm -r .venvCsp
+fi
+# Create and activate a new virtual environment, ensure 'python' is python3
+python -m venv .venvCsp
+source .venvCsp/Scripts/activate
 ```
 
 ### 2. Install CompSensePack (it also installs requirements)
