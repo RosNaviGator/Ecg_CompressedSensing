@@ -1,11 +1,14 @@
 Welcome to CompSensePack’s Documentation!
 ==========================================
 
-Author: `Francesco Rosnati <https://github.com/RosNaviGator>`_
+Author: `Francesco Rosnati (GitHub) <https://github.com/RosNaviGator>`_
+
 Date: September 2024
+
 Version: |release|
 
-Repository: `GitHub Repo <https://github.com/RosNaviGator/NAML_ECG_compressor>`_
+Project Repository: `CompSensePack GitHub Repo <https://github.com/RosNaviGator/NAML_ECG_compressor>`_
+
 
 Project Overview
 ----------------
@@ -29,6 +32,11 @@ The idea of compress sensing is to re-build the *sparse* version of the original
 Recovery phase of `CS` has two fundamental components, the first one is the *sparsifying dictionary*: given that the original natural signal is *sparse* in some domain, the dictionary is the base of such domain. It's possible to exploit both *fixed dictionaries*, like *DCT* or *DWT* based ones, or *adaptive dictionary learning* where the dictionary is learned from a *training set* to better fit the specific data. The `CompSensePack` offer uses a *DCT*-based dictionary as a benchmark to test in which case *MOD* and *KSVD* adaptive dictionary learning algorithms can (or can't) perform better than the first.
 
 The second component of is a *recovery method*: in order to re-build the sparse solution we need to solve the *L0* minimization problem, which literally means to find the sparsest solution that verify a given condition. Usually the problem is not possible to solve directly, it is though possible to solve *L1* minimization problem with same condition, it can be demonstrated that the solutions of the two are approximately the same given the correct conditions. The `CompSensePack` however uses teh `SL0` algorithm that directly approximates the solution of the *L0* problem. 
+
+
+.. image:: _static/compSenseClass.jpeg
+   :align: center
+   :width: 600px
 
 
 Contents
