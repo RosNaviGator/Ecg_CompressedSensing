@@ -192,3 +192,7 @@ If you'd like to contribute to this project, feel free to open issues and submit
 
 
 
+## Bugs & Possible Future developements
+
+- The possibility of "mantaining one or more of the initial atoms" in the Dictionary in the KSVD implementation is not working properly, it's is not a particularly relevant feature in Ecg Signal processing
+- The record "100m.mat" is **weird**... It's the one which I performed the main study of best methods, but after the study I realized that the SNR values and the whole record do not match with the actual record from `wfdb`: in the future it would be advisable to repeat the study with an actual record from `wfdb`
