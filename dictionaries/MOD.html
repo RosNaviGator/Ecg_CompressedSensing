@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOD Dictionary Learning &mdash; Ecg Compressed Sensing with Kronecker Technique &amp; Adaptive Dictionary Learning 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="OMP Algorithm" href="OMP.html" />
+    <link rel="prev" title="KSVD Dictionary Learning" href="KSVD.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../CompSensePack.html">CompSensePack Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../CompSensePack.html#main-modules">Main Modules</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../CompSensePack.html#dictionaries-subpackage">Dictionaries Subpackage</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="KSVD.html">KSVD Dictionary Learning</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">MOD Dictionary Learning</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-usage">Example usage:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#CompSensePack.dictionaries.MOD.I_findDistanceBetweenDictionaries"><code class="docutils literal notranslate"><span class="pre">I_findDistanceBetweenDictionaries()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#CompSensePack.dictionaries.MOD.MOD"><code class="docutils literal notranslate"><span class="pre">MOD()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="OMP.html">OMP Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dct_dictionary.html">DCT Dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dictionary_utils.html">Dictionary Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../CompSensePack.html">CompSensePack Package</a></li>
+          <li class="breadcrumb-item"><a href="index.html">&lt;no title&gt;</a></li>
+      <li class="breadcrumb-item active">MOD Dictionary Learning</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/dictionaries/MOD.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mod-dictionary-learning">
+<h1>MOD Dictionary Learning<a class="headerlink" href="#mod-dictionary-learning" title="Link to this heading"></a></h1>
+<p>This module implements the MOD (Method of Optimal Directions) dictionary learning algorithm, along with related functions.</p>
+<p id="module-CompSensePack.dictionaries.MOD">MOD.py - Method of Optimal Directions (MOD) algorithm for dictionary learning.</p>
+<p>This module implements the MOD algorithm, which is used for learning a dictionary for sparse coding.
+It includes utility functions to measure the distance between dictionaries and to learn a dictionary
+that can sparsely represent a set of signals using the OMP algorithm.</p>
+<section id="example-usage">
+<h2>Example usage:<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">MOD</span> <span class="kn">import</span> <span class="n">MOD</span><span class="p">,</span> <span class="n">I_findDistanceBetweenDictionaries</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>  <span class="c1"># Random signals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;K&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;num_iterations&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;initialization_method&#39;</span><span class="p">:</span> <span class="s1">&#39;DataElements&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dictionary</span><span class="p">,</span> <span class="n">coefficients</span> <span class="o">=</span> <span class="n">MOD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Distance between original and updated dictionary</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ratio</span><span class="p">,</span> <span class="n">total_distance</span> <span class="o">=</span> <span class="n">I_findDistanceBetweenDictionaries</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">new_dictionary</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="CompSensePack.dictionaries.MOD.I_findDistanceBetweenDictionaries">
+<span class="sig-prename descclassname"><span class="pre">CompSensePack.dictionaries.MOD.</span></span><span class="sig-name descname"><span class="pre">I_findDistanceBetweenDictionaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">original</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CompSensePack/dictionaries/MOD.html#I_findDistanceBetweenDictionaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CompSensePack.dictionaries.MOD.I_findDistanceBetweenDictionaries" title="Link to this definition"></a></dt>
+<dd><p>Calculates the distance between two dictionaries.</p>
+<p>This function compares two dictionaries by calculating the number of columns 
+that have a very low error between the original and the new dictionary.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>original<span class="classifier">numpy.ndarray</span></dt><dd><p>The original dictionary.</p>
+</dd>
+<dt>new<span class="classifier">numpy.ndarray</span></dt><dd><p>The new dictionary.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>ratio<span class="classifier">float</span></dt><dd><p>The ratio of dictionary elements with a small error (i.e., those that 
+satisfy the condition <cite>errorOfElement &lt; 0.01</cite>).</p>
+</dd>
+<dt>totalDistances<span class="classifier">float</span></dt><dd><p>The sum of all error values between the original and new dictionary elements.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The function modifies the new dictionary to ensure that each column starts 
+with a positive value (consistent with the original dictionary).</p></li>
+</ul>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">original_dict</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_dict</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ratio</span><span class="p">,</span> <span class="n">total_distance</span> <span class="o">=</span> <span class="n">I_findDistanceBetweenDictionaries</span><span class="p">(</span><span class="n">original_dict</span><span class="p">,</span> <span class="n">new_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CompSensePack.dictionaries.MOD.MOD">
+<span class="sig-prename descclassname"><span class="pre">CompSensePack.dictionaries.MOD.</span></span><span class="sig-name descname"><span class="pre">MOD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CompSensePack/dictionaries/MOD.html#MOD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CompSensePack.dictionaries.MOD.MOD" title="Link to this definition"></a></dt>
+<dd><p>Method of Optimal Directions (MOD) algorithm for dictionary learning.</p>
+<p>The MOD algorithm is a method for learning a dictionary for sparse representation of signals.
+It iteratively updates the dictionary to best represent the input data with sparse coefficients
+using the Orthogonal Matching Pursuit (OMP) algorithm.</p>
+<section id="id1">
+<h2>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<dl>
+<dt>data<span class="classifier">numpy.ndarray</span></dt><dd><p>An (n x N) matrix containing N signals, each of dimension n.</p>
+</dd>
+<dt>parameters<span class="classifier">dict</span></dt><dd><dl>
+<dt>A dictionary containing the parameters for the MOD algorithm:</dt><dd><ul>
+<li><dl class="simple">
+<dt>K<span class="classifier">int</span></dt><dd><p>The number of dictionary elements (columns) to train.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>num_iterations<span class="classifier">int</span></dt><dd><p>The number of iterations to perform for dictionary learning.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>initialization_method<span class="classifier">str</span></dt><dd><p>Method to initialize the dictionary. Options are:
+* ‘DataElements’ - Initializes the dictionary using the first K data signals.
+* ‘GivenMatrix’ - Initializes the dictionary using a provided matrix</p>
+<blockquote>
+<div><p>(requires ‘initial_dictionary’ key).</p>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>initial_dictionary<span class="classifier">numpy.ndarray, optional</span></dt><dd><p>The initial dictionary matrix to use if ‘initialization_method’ is 
+set to ‘GivenMatrix’. It should be of size (n x K).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>L<span class="classifier">int</span></dt><dd><p>The number of non-zero coefficients to use in OMP for sparse
+representation of each signal.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>dictionary<span class="classifier">numpy.ndarray</span></dt><dd><p>The trained dictionary of size (n x K), where each column is a dictionary element.</p>
+</dd>
+<dt>coef_matrix<span class="classifier">numpy.ndarray</span></dt><dd><p>The coefficient matrix of size (K x N), representing the sparse representation
+of the input data using the trained dictionary.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h2>Notes<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The dictionary is initialized either from the data signals or from a provided matrix.</p></li>
+<li><p>The OMP algorithm is used to solve the sparse coding step at each iteration.</p></li>
+<li><p>The algorithm iteratively refines the dictionary by solving a least squares problem.</p></li>
+<li><p>The columns of the dictionary are normalized to unit norm and positive first elements.</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>Example<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;K&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;num_iterations&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;initialization_method&#39;</span><span class="p">:</span> <span class="s1">&#39;DataElements&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dictionary</span><span class="p">,</span> <span class="n">coefficients</span> <span class="o">=</span> <span class="n">MOD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="KSVD.html" class="btn btn-neutral float-left" title="KSVD Dictionary Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="OMP.html" class="btn btn-neutral float-right" title="OMP Algorithm" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Francesco Rosnati.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CompSensePack.dictionaries.dictionary_utils &mdash; Ecg Compressed Sensing with Kronecker Technique &amp; Adaptive Dictionary Learning 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../CompSensePack.html">CompSensePack Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">CompSensePack.dictionaries.dictionary_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for CompSensePack.dictionaries.dictionary_utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">dictionary_utils.py - Utility functions for matrix operations used in dictionary learning.</span>
+
+<span class="sd">This module provides various utility functions for working with matrices, such as:</span>
+<span class="sd">1. Computing the independent columns of a matrix.</span>
+<span class="sd">2. Checking if the columns of a matrix are normalized.</span>
+<span class="sd">3. Computing the coherence of a matrix.</span>
+<span class="sd">4. Checking various properties of a matrix, such as full rank, normalization, and coherence.</span>
+
+<span class="sd">These utilities are useful for tasks in dictionary learning, signal processing, and sparse coding.</span>
+
+<span class="sd">Example usage:</span>
+<span class="sd">--------------</span>
+<span class="sd">&gt;&gt;&gt; from dictionary_utils import compute_independent_columns, check_normalization, compute_coherence, check_matrix_properties</span>
+
+<span class="sd">&gt;&gt;&gt; A = np.random.randn(5, 5)</span>
+<span class="sd">&gt;&gt;&gt; independent_columns = compute_independent_columns(A)</span>
+<span class="sd">&gt;&gt;&gt; is_normalized = check_normalization(A)</span>
+<span class="sd">&gt;&gt;&gt; coherence = compute_coherence(A)</span>
+<span class="sd">&gt;&gt;&gt; check_matrix_properties(A)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="compute_independent_columns">
+<a class="viewcode-back" href="../../../dictionaries/dictionary_utils.html#CompSensePack.dictionaries.dictionary_utils.compute_independent_columns">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_independent_columns</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the independent columns of a matrix using the QR decomposition.</span>
+
+<span class="sd">    This function identifies the independent columns of a given matrix `A` by performing </span>
+<span class="sd">    a QR decomposition. It selects columns corresponding to non-zero diagonal elements of </span>
+<span class="sd">    the `R` matrix, which are considered linearly independent.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : numpy.ndarray</span>
+<span class="sd">        The matrix for which to compute the independent columns.</span>
+<span class="sd">    </span>
+<span class="sd">    tol : float, optional (default=1e-10)</span>
+<span class="sd">        The tolerance value for considering diagonal elements of `R` as non-zero.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ind_cols : numpy.ndarray</span>
+<span class="sd">        A matrix containing the independent columns of `A`.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The QR decomposition is used to determine the rank of the matrix `A`.</span>
+<span class="sd">    - Columns corresponding to non-zero diagonal elements of the `R` matrix are considered independent.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; A = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])</span>
+<span class="sd">    &gt;&gt;&gt; compute_independent_columns(A)</span>
+<span class="sd">    array([[1, 2],</span>
+<span class="sd">           [4, 5],</span>
+<span class="sd">           [7, 8]])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Perform the QR decomposition</span>
+    <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+    <span class="c1"># Find the independent columns based on the rank of R</span>
+    <span class="n">rank</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">R</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">)</span>
+    <span class="n">ind_cols</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span> <span class="p">:</span><span class="n">rank</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">ind_cols</span></div>
+
+
+<div class="viewcode-block" id="check_normalization">
+<a class="viewcode-back" href="../../../dictionaries/dictionary_utils.html#CompSensePack.dictionaries.dictionary_utils.check_normalization">[docs]</a>
+<span class="k">def</span> <span class="nf">check_normalization</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if the columns of a matrix are normalized (i.e., each column has a unit norm).</span>
+
+<span class="sd">    This function calculates the norm of each column in the matrix `A` and checks if all </span>
+<span class="sd">    column norms are close to 1.0, which indicates normalization.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : numpy.ndarray</span>
+<span class="sd">        The matrix to check for normalization.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    is_normalized : bool</span>
+<span class="sd">        True if all columns of `A` are normalized, False otherwise.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; A = np.array([[1, 0], [0, 1]])</span>
+<span class="sd">    &gt;&gt;&gt; check_normalization(A)</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">column_norms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">is_normalized</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">column_norms</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">is_normalized</span></div>
+
+
+<div class="viewcode-block" id="compute_coherence">
+<a class="viewcode-back" href="../../../dictionaries/dictionary_utils.html#CompSensePack.dictionaries.dictionary_utils.compute_coherence">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_coherence</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the coherence of the given matrix.</span>
+
+<span class="sd">    Coherence is a measure of the maximum correlation between any two columns of a matrix. </span>
+<span class="sd">    It is useful in various applications, such as signal processing and compressed sensing, </span>
+<span class="sd">    to assess the degree of similarity between different columns of the matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix : numpy.ndarray</span>
+<span class="sd">        An (N x M) matrix where coherence is to be calculated.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    coherence : float</span>
+<span class="sd">        The coherence of the matrix, defined as the maximum absolute value of the off-diagonal </span>
+<span class="sd">        elements in the Gram matrix of the column-normalized input matrix.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; matrix = np.array([[1, 0], [0, 1]])</span>
+<span class="sd">    &gt;&gt;&gt; compute_coherence(matrix)</span>
+<span class="sd">    0.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Normalize the columns of the matrix</span>
+    <span class="n">normalized_matrix</span> <span class="o">=</span> <span class="n">matrix</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1"># Compute the Gram matrix (inner products between all pairs of columns)</span>
+    <span class="n">gram_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">normalized_matrix</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">normalized_matrix</span><span class="p">)</span>
+    
+    <span class="c1"># Remove the diagonal elements (which are all 1&#39;s) to only consider distinct columns</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">gram_matrix</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    
+    <span class="c1"># Compute the coherence as the maximum absolute value of the off-diagonal elements</span>
+    <span class="n">coherence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">gram_matrix</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">coherence</span></div>
+
+
+<div class="viewcode-block" id="check_matrix_properties">
+<a class="viewcode-back" href="../../../dictionaries/dictionary_utils.html#CompSensePack.dictionaries.dictionary_utils.check_matrix_properties">[docs]</a>
+<span class="k">def</span> <span class="nf">check_matrix_properties</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks various properties of a matrix.</span>
+
+<span class="sd">    This function checks if the matrix `A` is full rank, if its columns and rows are normalized,</span>
+<span class="sd">    and computes the coherence of the matrix. It also prints the results for each property.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : numpy.ndarray</span>
+<span class="sd">        The matrix to check.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; A = np.array([[1, 2], [3, 4]])</span>
+<span class="sd">    &gt;&gt;&gt; check_matrix_properties(A)</span>
+<span class="sd">    Is full rank: True</span>
+<span class="sd">    Are columns normalized: False</span>
+<span class="sd">    Are rows normalized: False</span>
+<span class="sd">    Coherence: 0.9999999999999999</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if the matrix is full rank</span>
+    <span class="n">is_full_rank</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="c1"># Check if the columns are normalized</span>
+    <span class="n">is_columns_normalized</span> <span class="o">=</span> <span class="n">check_normalization</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+    <span class="c1"># Check if the rows are normalized</span>
+    <span class="n">is_rows_normalized</span> <span class="o">=</span> <span class="n">check_normalization</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="c1"># Compute the coherence of the matrix</span>
+    <span class="n">coherence</span> <span class="o">=</span> <span class="n">compute_coherence</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+    <span class="c1"># Print the results</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is full rank:&quot;</span><span class="p">,</span> <span class="n">is_full_rank</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Are columns normalized:&quot;</span><span class="p">,</span> <span class="n">is_columns_normalized</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Are rows normalized:&quot;</span><span class="p">,</span> <span class="n">is_rows_normalized</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coherence:&quot;</span><span class="p">,</span> <span class="n">coherence</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Francesco Rosnati.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

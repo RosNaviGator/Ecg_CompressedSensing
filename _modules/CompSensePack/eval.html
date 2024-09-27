@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CompSensePack.eval &mdash; Ecg Compressed Sensing with Kronecker Technique &amp; Adaptive Dictionary Learning 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../CompSensePack.html">CompSensePack Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">CompSensePack.eval</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for CompSensePack.eval</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">eval.py - Functions for Signal-to-Noise Ratio (SNR) calculation and signal plotting.</span>
+
+<span class="sd">This module provides utility functions for:</span>
+<span class="sd">1. Calculating the Signal-to-Noise Ratio (SNR) between an original and a reconstructed signal.</span>
+<span class="sd">2. Plotting the original and reconstructed signals together, with options to display the SNR and save the plot.</span>
+
+<span class="sd">Note:</span>
+<span class="sd">-----</span>
+<span class="sd">- Requires `matplotlib` and `numpy`.</span>
+<span class="sd">- Useful for comparing signals and visualizing differences in various signal processing applications.</span>
+
+<span class="sd">Example usage:</span>
+<span class="sd">--------------</span>
+<span class="sd">&gt;&gt;&gt; import numpy as np</span>
+<span class="sd">&gt;&gt;&gt; from eval import calculate_snr, plot_signals</span>
+
+<span class="sd">&gt;&gt;&gt; original_signal = np.random.rand(100)</span>
+<span class="sd">&gt;&gt;&gt; reconstructed_signal = np.random.rand(100)</span>
+
+<span class="sd">&gt;&gt;&gt; snr = calculate_snr(original_signal, reconstructed_signal)</span>
+<span class="sd">&gt;&gt;&gt; plot_signals(original_signal, reconstructed_signal, snr=snr, save_path=&#39;./plots&#39;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<div class="viewcode-block" id="calculate_snr">
+<a class="viewcode-back" href="../../eval.html#CompSensePack.eval.calculate_snr">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_snr</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">recovered_signal</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the Signal-to-Noise Ratio (SNR) between the original signal and the recovered signal.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal : numpy.ndarray</span>
+<span class="sd">        The original signal.</span>
+<span class="sd">    recovered_signal : numpy.ndarray</span>
+<span class="sd">        The recovered signal after some processing or recovery algorithm.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    snr : float</span>
+<span class="sd">        The Signal-to-Noise Ratio (SNR) in decibels (dB).</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The SNR is calculated as 20 * log10(norm(signal) / norm(signal - recovered_signal)).</span>
+<span class="sd">    - A higher SNR value indicates a better recovery, with less error relative to the original signal.</span>
+<span class="sd">    - If the signals are identical, the SNR would be infinite. If the recovered signal has no similarity, the SNR will be very low or negative.</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; original = np.random.rand(100)</span>
+<span class="sd">    &gt;&gt;&gt; recovered = original + np.random.normal(0, 0.1, 100)</span>
+<span class="sd">    &gt;&gt;&gt; snr = calculate_snr(original, recovered)</span>
+<span class="sd">    &gt;&gt;&gt; print(f&quot;SNR: {snr:.2f} dB&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Ensure the signals are numpy arrays</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">recovered_signal</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Both signal and recovered_signal must be numpy arrays.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Calculate the error between the signals</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">recovered_signal</span> <span class="o">-</span> <span class="n">signal</span>
+    
+    <span class="c1"># Calculate and return the SNR in dB</span>
+    <span class="n">snr</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">snr</span></div>
+
+
+
+<div class="viewcode-block" id="plot_signals">
+<a class="viewcode-back" href="../../eval.html#CompSensePack.eval.plot_signals">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_signals</span><span class="p">(</span><span class="n">original_signal</span><span class="p">,</span> <span class="n">reconstructed_signal</span><span class="p">,</span> <span class="n">snr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">original_name</span><span class="o">=</span><span class="s2">&quot;Original Signal&quot;</span><span class="p">,</span> 
+                 <span class="n">reconstructed_name</span><span class="o">=</span><span class="s2">&quot;Reconstructed Signal&quot;</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">start_pct</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_snr_box</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots a section of the original signal and the reconstructed signal on the same plot with the given names,</span>
+<span class="sd">    displays the Signal-to-Noise Ratio (SNR) in a text box if enabled, and saves the plot to a specified directory.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    original_signal : numpy.ndarray</span>
+<span class="sd">        The original signal to be plotted.</span>
+<span class="sd">    </span>
+<span class="sd">    reconstructed_signal : numpy.ndarray</span>
+<span class="sd">        The reconstructed signal to be plotted.</span>
+<span class="sd">    </span>
+<span class="sd">    snr : float, optional (default=None)</span>
+<span class="sd">        The Signal-to-Noise Ratio to display. If None, it will be computed using the original and reconstructed signals.</span>
+<span class="sd">    </span>
+<span class="sd">    original_name : str, optional (default=&quot;Original Signal&quot;)</span>
+<span class="sd">        The name to display for the original signal in the plot.</span>
+<span class="sd">    </span>
+<span class="sd">    reconstructed_name : str, optional (default=&quot;Reconstructed Signal&quot;)</span>
+<span class="sd">        The name to display for the reconstructed signal in the plot.</span>
+<span class="sd">    </span>
+<span class="sd">    save_path : str, optional</span>
+<span class="sd">        The directory path where the plot should be saved. If None, the plot will not be saved.</span>
+<span class="sd">    </span>
+<span class="sd">    filename : str, optional</span>
+<span class="sd">        The name of the file to save the plot as. If None and save_path is provided, a default name will be generated.</span>
+<span class="sd">    </span>
+<span class="sd">    start_pct : float, optional (default=0.0)</span>
+<span class="sd">        The percentage (between 0 and 1) of the way through the signal to start plotting. For example, 0.5 means start </span>
+<span class="sd">        from the halfway point of the signals.</span>
+<span class="sd">    </span>
+<span class="sd">    num_samples : int, optional (default=None)</span>
+<span class="sd">        The number of samples to plot from the start point. If None, it will plot to the end of the signals.</span>
+<span class="sd">    </span>
+<span class="sd">    show_snr_box : bool, optional (default=False)</span>
+<span class="sd">        Whether to display the SNR value in a text box on the plot.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        This function does not return any value. It either displays or saves the plot.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Ensure the original and reconstructed signals have the same length; otherwise, a ValueError will be raised.</span>
+<span class="sd">    - The plot shows a section of the signals starting at `start_pct` and plots `num_samples` samples.</span>
+<span class="sd">    - The SNR can be displayed in a text box if `show_snr_box=True` and the SNR value is provided or calculated.</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; original = np.sin(np.linspace(0, 10, 100))</span>
+<span class="sd">    &gt;&gt;&gt; reconstructed = original + np.random.normal(0, 0.1, 100)</span>
+<span class="sd">    &gt;&gt;&gt; plot_signals(original, reconstructed, snr=20, save_path=&#39;./plots&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># Ensure the signals have the same length</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">original_signal</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">reconstructed_signal</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The original signal and the reconstructed signal must have the same length.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Calculate the start index based on percentage</span>
+    <span class="n">start_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_pct</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">original_signal</span><span class="p">))</span>
+    
+    <span class="c1"># Determine the end index based on num_samples</span>
+    <span class="k">if</span> <span class="n">num_samples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">end_idx</span> <span class="o">=</span> <span class="n">start_idx</span> <span class="o">+</span> <span class="n">num_samples</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">end_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">original_signal</span><span class="p">)</span>
+    
+    <span class="c1"># Ensure that the end index does not exceed the signal length</span>
+    <span class="n">end_idx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">end_idx</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">original_signal</span><span class="p">))</span>
+
+    <span class="c1"># Slice the signals to the selected section</span>
+    <span class="n">original_signal_section</span> <span class="o">=</span> <span class="n">original_signal</span><span class="p">[</span><span class="n">start_idx</span><span class="p">:</span><span class="n">end_idx</span><span class="p">]</span>
+    <span class="n">reconstructed_signal_section</span> <span class="o">=</span> <span class="n">reconstructed_signal</span><span class="p">[</span><span class="n">start_idx</span><span class="p">:</span><span class="n">end_idx</span><span class="p">]</span>
+    
+    <span class="c1"># Calculate SNR if not provided</span>
+    <span class="k">if</span> <span class="n">snr</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">show_snr_box</span><span class="p">:</span>
+        <span class="n">snr</span> <span class="o">=</span> <span class="n">calculate_snr</span><span class="p">(</span><span class="n">original_signal_section</span><span class="p">,</span> <span class="n">reconstructed_signal_section</span><span class="p">)</span>
+    
+    <span class="c1"># Create the plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">original_signal_section</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">original_name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#1f77b4&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">reconstructed_signal_section</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">reconstructed_name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ff7f0e&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    
+    <span class="c1"># Title and labels</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">original_name</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">reconstructed_name</span><span class="si">}</span><span class="s2"> (Section: </span><span class="si">{</span><span class="n">start_pct</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">% - </span><span class="si">{</span><span class="n">num_samples</span><span class="si">}</span><span class="s2"> samples)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sample Index&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Amplitude&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Add a legend in the upper-right corner with a white background</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Display SNR in a text box in the top-left corner if show_snr_box is True</span>
+    <span class="k">if</span> <span class="n">show_snr_box</span> <span class="ow">and</span> <span class="n">snr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;SNR: </span><span class="si">{</span><span class="n">snr</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> dB&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;round&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">))</span>
+
+    <span class="c1"># Grid and show plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1"># Save the plot if a save path is provided</span>
+    <span class="k">if</span> <span class="n">save_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Ensure the save directory exists</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># Use provided filename or generate a default one</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">original_name</span><span class="si">}</span><span class="s2">_vs_</span><span class="si">{</span><span class="n">reconstructed_name</span><span class="si">}</span><span class="s2">_section.png&quot;</span>
+        
+        <span class="c1"># Define the file path to save the plot</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plot saved to </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Display the plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Francesco Rosnati.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

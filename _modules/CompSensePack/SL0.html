@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CompSensePack.SL0 &mdash; Ecg Compressed Sensing with Kronecker Technique &amp; Adaptive Dictionary Learning 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../CompSensePack.html">CompSensePack Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">CompSensePack.SL0</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for CompSensePack.SL0</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">SL0.py - Smoothed L0 (SL0) Algorithm for Sparse Signal Recovery</span>
+
+<span class="sd">This module contains an implementation of the Smoothed L0 (SL0) algorithm, a popular approach </span>
+<span class="sd">for sparse signal recovery from an underdetermined system of linear equations.</span>
+
+<span class="sd">SL0 is a fast algorithm for solving the sparse coding problem by minimizing the L0-norm of the </span>
+<span class="sd">solution. It achieves this by iteratively smoothing the objective function and reducing sigma </span>
+<span class="sd">to approximate the L0-norm.</span>
+
+<span class="sd">References:</span>
+<span class="sd">-----------</span>
+<span class="sd">- Original MATLAB authors: Massoud Babaie-Zadeh, Hossein Mohimani, August 4, 2008.</span>
+<span class="sd">- Web-page: http://ee.sharif.ir/~SLzero</span>
+<span class="sd">- Ported to Python by RosNaviGator in 2024.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="SL0">
+<a class="viewcode-back" href="../../SL0.html#CompSensePack.SL0.SL0">[docs]</a>
+<span class="k">def</span> <span class="nf">SL0</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">sigma_min</span><span class="p">,</span> <span class="n">sigma_decrease_factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">mu_0</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">A_pinv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">showProgress</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solves the underdetermined system `A @ s = y` for the sparsest vector `s` using the Smoothed L0 (SL0) algorithm.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : numpy.ndarray</span>
+<span class="sd">        The observed vector (Mx1), where M is the number of rows in `A`.</span>
+<span class="sd">    </span>
+<span class="sd">    A : numpy.ndarray</span>
+<span class="sd">        The measurement matrix (MxN), which should be &#39;wide&#39;, meaning N &gt; M (more columns than rows).</span>
+<span class="sd">    </span>
+<span class="sd">    sigma_min : float</span>
+<span class="sd">        The minimum value of `sigma`, controlling when the algorithm terminates.</span>
+<span class="sd">    </span>
+<span class="sd">    sigma_decrease_factor : float, optional (default=0.5)</span>
+<span class="sd">        Factor by which `sigma` is reduced in each iteration.</span>
+<span class="sd">    </span>
+<span class="sd">    mu_0 : float, optional (default=2)</span>
+<span class="sd">        Scaling factor for `mu`, where `mu = mu_0 * sigma^2`. Controls convergence rate.</span>
+<span class="sd">    </span>
+<span class="sd">    L : int, optional (default=3)</span>
+<span class="sd">        Number of iterations for the inner loop (steepest descent).</span>
+<span class="sd">    </span>
+<span class="sd">    A_pinv : numpy.ndarray, optional</span>
+<span class="sd">        Precomputed pseudoinverse of `A` (MxN). If not provided, it will be computed internally.</span>
+<span class="sd">    </span>
+<span class="sd">    showProgress : bool, optional (default=False)</span>
+<span class="sd">        If True, prints the value of `sigma` during iterations.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    s : numpy.ndarray</span>
+<span class="sd">        The estimated sparse signal (Nx1) that best satisfies `A @ s = y`.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The algorithm begins by initializing `s` using the pseudoinverse of `A`. </span>
+<span class="sd">    - It iteratively adjusts `s` to reduce the L0-norm by applying a Gaussian smoothing kernel.</span>
+<span class="sd">    - The process continues until `sigma` reaches `sigma_min`, with `sigma` being reduced geometrically.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; A = np.random.randn(50, 200)  # Random wide matrix</span>
+<span class="sd">    &gt;&gt;&gt; y = np.random.randn(50)       # Random observation vector</span>
+<span class="sd">    &gt;&gt;&gt; s = SL0(y, A, sigma_min=0.01)</span>
+<span class="sd">    &gt;&gt;&gt; print(&quot;Recovered sparse signal:&quot;, s)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="n">A_pinv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">A_pinv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        
+    <span class="c1"># Initialize the estimated sparse signal</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">A_pinv</span> <span class="o">@</span> <span class="n">y</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+    <span class="c1"># Define the delta function (Gaussian kernel applied to `s`)</span>
+    <span class="n">OurDelta</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">s</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Main loop: reduce sigma iteratively</span>
+    <span class="k">while</span> <span class="n">sigma</span> <span class="o">&gt;</span> <span class="n">sigma_min</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">OurDelta</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">-</span> <span class="n">mu_0</span> <span class="o">*</span> <span class="n">delta</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">-</span> <span class="n">A_pinv</span> <span class="o">@</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">s</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">showProgress</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;sigma: </span><span class="si">{</span><span class="n">sigma</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Decrease sigma geometrically</span>
+        <span class="n">sigma</span> <span class="o">*=</span> <span class="n">sigma_decrease_factor</span>
+
+    <span class="k">return</span> <span class="n">s</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Francesco Rosnati.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

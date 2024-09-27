@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OMP Algorithm &mdash; Ecg Compressed Sensing with Kronecker Technique &amp; Adaptive Dictionary Learning 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DCT Dictionary" href="dct_dictionary.html" />
+    <link rel="prev" title="MOD Dictionary Learning" href="MOD.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../CompSensePack.html">CompSensePack Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../CompSensePack.html#main-modules">Main Modules</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../CompSensePack.html#dictionaries-subpackage">Dictionaries Subpackage</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="KSVD.html">KSVD Dictionary Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MOD.html">MOD Dictionary Learning</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">OMP Algorithm</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-usage">Example usage:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#CompSensePack.dictionaries.OMP.OMP"><code class="docutils literal notranslate"><span class="pre">OMP()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dct_dictionary.html">DCT Dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dictionary_utils.html">Dictionary Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../CompSensePack.html">CompSensePack Package</a></li>
+          <li class="breadcrumb-item"><a href="index.html">&lt;no title&gt;</a></li>
+      <li class="breadcrumb-item active">OMP Algorithm</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/dictionaries/OMP.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="omp-algorithm">
+<h1>OMP Algorithm<a class="headerlink" href="#omp-algorithm" title="Link to this heading"></a></h1>
+<p>This module contains the Orthogonal Matching Pursuit (OMP) algorithm used for sparse coding.</p>
+<p id="module-CompSensePack.dictionaries.OMP">OMP.py - Orthogonal Matching Pursuit (OMP) algorithm for sparse coding.</p>
+<p>This module implements the OMP algorithm, which is widely used in compressed sensing 
+and sparse signal recovery. It provides a method to represent signals as sparse combinations 
+of atoms from a given dictionary.</p>
+<section id="example-usage">
+<h2>Example usage:<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">OMP</span> <span class="kn">import</span> <span class="n">OMP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dictio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>  <span class="c1"># Random dictionary with 200 atoms</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># 10 random signals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sparse_codes</span> <span class="o">=</span> <span class="n">OMP</span><span class="p">(</span><span class="n">dictio</span><span class="p">,</span> <span class="n">signals</span><span class="p">,</span> <span class="n">max_coeff</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="CompSensePack.dictionaries.OMP.OMP">
+<span class="sig-prename descclassname"><span class="pre">CompSensePack.dictionaries.OMP.</span></span><span class="sig-name descname"><span class="pre">OMP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_coeff</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CompSensePack/dictionaries/OMP.html#OMP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CompSensePack.dictionaries.OMP.OMP" title="Link to this definition"></a></dt>
+<dd><p>Orthogonal Matching Pursuit (OMP) algorithm for sparse coding.</p>
+<p>This function implements the OMP algorithm, which is used to find the sparse
+representation of a signal over a given dictionary.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>dictio<span class="classifier">numpy.ndarray</span></dt><dd><p>The dictionary to use for sparse coding. It should be a matrix of size (n x K), 
+where n is the signal dimension and K is the number of atoms in the dictionary.
+The columns of the dictionary must be normalized (i.e., each column should have a unit norm).</p>
+</dd>
+<dt>sig<span class="classifier">numpy.ndarray</span></dt><dd><p>The signals to represent using the dictionary. 
+It should be a matrix of size (n x N), where N is the number of signals, and n is the signal dimension.</p>
+</dd>
+<dt>max_coeff<span class="classifier">int</span></dt><dd><p>The maximum number of coefficients (non-zero entries) to use for representing each signal.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>s<span class="classifier">numpy.ndarray</span></dt><dd><p>The sparse representation of the signals over the dictionary.
+It will be a matrix of size (K x N), where K is the number of atoms in the dictionary 
+and N is the number of signals.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>This algorithm iteratively selects atoms from the dictionary that are most correlated 
+with the current residual and updates the residual at each iteration.</p></li>
+<li><p>The process stops when the norm of the residual is sufficiently small or when the maximum 
+number of coefficients (<cite>max_coeff</cite>) has been reached.</p></li>
+<li><p>The dictionary’s columns <strong>must be normalized</strong> before using this algorithm, as the algorithm 
+relies on the assumption that the atoms are unit-norm.</p></li>
+</ul>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dictio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>  <span class="c1"># Random dictionary with 200 atoms</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># 10 random signals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sparse_codes</span> <span class="o">=</span> <span class="n">OMP</span><span class="p">(</span><span class="n">dictio</span><span class="p">,</span> <span class="n">signals</span><span class="p">,</span> <span class="n">max_coeff</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="MOD.html" class="btn btn-neutral float-left" title="MOD Dictionary Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dct_dictionary.html" class="btn btn-neutral float-right" title="DCT Dictionary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Francesco Rosnati.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

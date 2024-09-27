@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KSVD Dictionary Learning &mdash; Ecg Compressed Sensing with Kronecker Technique &amp; Adaptive Dictionary Learning 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MOD Dictionary Learning" href="MOD.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../CompSensePack.html">CompSensePack Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../CompSensePack.html#main-modules">Main Modules</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../CompSensePack.html#dictionaries-subpackage">Dictionaries Subpackage</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">KSVD Dictionary Learning</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-usage">Example usage:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#CompSensePack.dictionaries.KSVD.I_clearDictionary"><code class="docutils literal notranslate"><span class="pre">I_clearDictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#CompSensePack.dictionaries.KSVD.I_findBetterDictionaryElement"><code class="docutils literal notranslate"><span class="pre">I_findBetterDictionaryElement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#CompSensePack.dictionaries.KSVD.KSVD"><code class="docutils literal notranslate"><span class="pre">KSVD()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#CompSensePack.dictionaries.KSVD.svds_vector"><code class="docutils literal notranslate"><span class="pre">svds_vector()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="MOD.html">MOD Dictionary Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="OMP.html">OMP Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dct_dictionary.html">DCT Dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dictionary_utils.html">Dictionary Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../CompSensePack.html">CompSensePack Package</a></li>
+          <li class="breadcrumb-item"><a href="index.html">&lt;no title&gt;</a></li>
+      <li class="breadcrumb-item active">KSVD Dictionary Learning</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/dictionaries/KSVD.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ksvd-dictionary-learning">
+<h1>KSVD Dictionary Learning<a class="headerlink" href="#ksvd-dictionary-learning" title="Link to this heading"></a></h1>
+<p>This module implements the K-SVD dictionary learning algorithm, along with related functions.</p>
+<p id="module-CompSensePack.dictionaries.KSVD">KSVD.py - K-SVD algorithm for dictionary learning and sparse coding using Orthogonal Matching Pursuit (OMP).</p>
+<p>This module implements the K-SVD algorithm, which is widely used for dictionary learning. The algorithm
+iteratively updates dictionary elements to best represent a set of input signals. This module also includes
+utility functions to update dictionary elements using Singular Value Decomposition (SVD) and handle redundant
+dictionary elements.</p>
+<section id="example-usage">
+<h2>Example usage:<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">KSVD</span> <span class="kn">import</span> <span class="n">KSVD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>  <span class="c1"># Random signals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;K&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;num_iterations&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;initialization_method&#39;</span><span class="p">:</span> <span class="s1">&#39;DataElements&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;preserve_dc_atom&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dictionary</span><span class="p">,</span> <span class="n">coefficients</span> <span class="o">=</span> <span class="n">KSVD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="CompSensePack.dictionaries.KSVD.I_clearDictionary">
+<span class="sig-prename descclassname"><span class="pre">CompSensePack.dictionaries.KSVD.</span></span><span class="sig-name descname"><span class="pre">I_clearDictionary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictionary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CompSensePack/dictionaries/KSVD.html#I_clearDictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CompSensePack.dictionaries.KSVD.I_clearDictionary" title="Link to this definition"></a></dt>
+<dd><p>Clear or replace redundant dictionary elements.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>dictionary<span class="classifier">numpy.ndarray</span></dt><dd><p>The dictionary matrix to be updated.</p>
+</dd>
+<dt>coeff_matrix<span class="classifier">numpy.ndarray</span></dt><dd><p>The coefficient matrix representing the sparse codes for the data.</p>
+</dd>
+<dt>data<span class="classifier">numpy.ndarray</span></dt><dd><p>The original data matrix.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>dictionary<span class="classifier">numpy.ndarray</span></dt><dd><p>The updated dictionary with redundant elements replaced.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CompSensePack.dictionaries.KSVD.I_findBetterDictionaryElement">
+<span class="sig-prename descclassname"><span class="pre">CompSensePack.dictionaries.KSVD.</span></span><span class="sig-name descname"><span class="pre">I_findBetterDictionaryElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dictionary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numCoefUsed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CompSensePack/dictionaries/KSVD.html#I_findBetterDictionaryElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CompSensePack.dictionaries.KSVD.I_findBetterDictionaryElement" title="Link to this definition"></a></dt>
+<dd><p>Update the j-th dictionary element using the current sparse representation.</p>
+<section id="id1">
+<h2>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>data<span class="classifier">numpy.ndarray</span></dt><dd><p>The data matrix (n x N), where n is the signal dimension and N is the number of signals.</p>
+</dd>
+<dt>dictionary<span class="classifier">numpy.ndarray</span></dt><dd><p>The current dictionary matrix (n x K), where K is the number of dictionary atoms.</p>
+</dd>
+<dt>j<span class="classifier">int</span></dt><dd><p>The index of the dictionary element to be updated.</p>
+</dd>
+<dt>coeff_matrix<span class="classifier">numpy.ndarray</span></dt><dd><p>The sparse coefficient matrix (K x N), representing the sparse codes for the signals.</p>
+</dd>
+<dt>numCoefUsed<span class="classifier">int, optional (default=1)</span></dt><dd><p>The number of coefficients used in the sparse representation.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>betterDictionaryElement<span class="classifier">numpy.ndarray</span></dt><dd><p>The updated dictionary element (vector).</p>
+</dd>
+<dt>coeff_matrix<span class="classifier">numpy.ndarray</span></dt><dd><p>The updated coefficient matrix with the new coefficients for the updated dictionary element.</p>
+</dd>
+<dt>newVectAdded<span class="classifier">int</span></dt><dd><p>A flag indicating if a new vector was added to the dictionary.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CompSensePack.dictionaries.KSVD.KSVD">
+<span class="sig-prename descclassname"><span class="pre">CompSensePack.dictionaries.KSVD.</span></span><span class="sig-name descname"><span class="pre">KSVD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CompSensePack/dictionaries/KSVD.html#KSVD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CompSensePack.dictionaries.KSVD.KSVD" title="Link to this definition"></a></dt>
+<dd><p>K-SVD algorithm for dictionary learning.</p>
+<p>The K-SVD algorithm is an iterative method for updating the dictionary and sparse coefficients
+to best represent the input signals. The dictionary is updated using the singular value decomposition (SVD)
+of the data approximation error.</p>
+<section id="id3">
+<h2>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>data<span class="classifier">numpy.ndarray</span></dt><dd><p>The data matrix (n x N) containing N signals of dimension n.</p>
+</dd>
+<dt>param<span class="classifier">dict</span></dt><dd><p>A dictionary containing parameters for the K-SVD algorithm:
+- ‘K’: int, the number of dictionary atoms.
+- ‘num_iterations’: int, the number of iterations to run the K-SVD algorithm.
+- ‘initialization_method’: str, how to initialize the dictionary (‘DataElements’ or ‘GivenMatrix’).
+- ‘initial_dictionary’: numpy.ndarray, the initial dictionary (if ‘GivenMatrix’ is used).
+- ‘L’: int, the number of non-zero coefficients for sparse coding (used in OMP).
+- ‘preserve_dc_atom’: int, flag to preserve a DC atom (default is 0).</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h2>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>dictionary<span class="classifier">numpy.ndarray</span></dt><dd><p>The learned dictionary of size (n x K).</p>
+</dd>
+<dt>coef_matrix<span class="classifier">numpy.ndarray</span></dt><dd><p>The sparse coefficient matrix (K x N), representing the sparse representation of the data.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CompSensePack.dictionaries.KSVD.svds_vector">
+<span class="sig-prename descclassname"><span class="pre">CompSensePack.dictionaries.KSVD.</span></span><span class="sig-name descname"><span class="pre">svds_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/CompSensePack/dictionaries/KSVD.html#svds_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CompSensePack.dictionaries.KSVD.svds_vector" title="Link to this definition"></a></dt>
+<dd><p>Handle SVD for a vector or a 2D matrix with one dimension equal to 1.</p>
+<section id="id5">
+<h2>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>v<span class="classifier">numpy.ndarray</span></dt><dd><p>Input vector or 2D matrix with one dimension equal to 1.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h2>Returns<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>u<span class="classifier">numpy.ndarray</span></dt><dd><p>The left singular vector (normalized).</p>
+</dd>
+<dt>s<span class="classifier">float</span></dt><dd><p>The singular value (the norm of the vector).</p>
+</dd>
+<dt>vt<span class="classifier">numpy.ndarray</span></dt><dd><p>The right singular vector, which is always [[1]] for vectors.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h2>Raises<a class="headerlink" href="#raises" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If the input is not a vector or a 2D array with one dimension equal to 1.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MOD.html" class="btn btn-neutral float-right" title="MOD Dictionary Learning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Francesco Rosnati.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

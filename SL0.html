@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SL0 Algorithm &mdash; Ecg Compressed Sensing with Kronecker Technique &amp; Adaptive Dictionary Learning 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Utilities" href="utils.html" />
+    <link rel="prev" title="Compressed Sensing Class" href="comp_sense_class.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="CompSensePack.html">CompSensePack Package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="CompSensePack.html#main-modules">Main Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="comp_sense_class.html">Compressed Sensing Class</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">SL0 Algorithm</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#references">References:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#CompSensePack.SL0.SL0"><code class="docutils literal notranslate"><span class="pre">SL0()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html">Evaluation and Plotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="measurement_matrix.html">Measurement Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CompSensePack.html#dictionaries-subpackage">Dictionaries Subpackage</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="CompSensePack.html">CompSensePack Package</a></li>
+      <li class="breadcrumb-item active">SL0 Algorithm</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/SL0.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sl0-algorithm">
+<h1>SL0 Algorithm<a class="headerlink" href="#sl0-algorithm" title="Link to this heading"></a></h1>
+<p>This module contains the implementation of the Smoothed L0 (SL0) algorithm for sparse signal recovery.</p>
+<p id="module-CompSensePack.SL0">SL0.py - Smoothed L0 (SL0) Algorithm for Sparse Signal Recovery</p>
+<p>This module contains an implementation of the Smoothed L0 (SL0) algorithm, a popular approach 
+for sparse signal recovery from an underdetermined system of linear equations.</p>
+<p>SL0 is a fast algorithm for solving the sparse coding problem by minimizing the L0-norm of the 
+solution. It achieves this by iteratively smoothing the objective function and reducing sigma 
+to approximate the L0-norm.</p>
+<section id="references">
+<h2>References:<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Original MATLAB authors: Massoud Babaie-Zadeh, Hossein Mohimani, August 4, 2008.</p></li>
+<li><p>Web-page: <a class="reference external" href="http://ee.sharif.ir/~SLzero">http://ee.sharif.ir/~SLzero</a></p></li>
+<li><p>Ported to Python by RosNaviGator in 2024.</p></li>
+</ul>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="CompSensePack.SL0.SL0">
+<span class="sig-prename descclassname"><span class="pre">CompSensePack.SL0.</span></span><span class="sig-name descname"><span class="pre">SL0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_decrease_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A_pinv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showProgress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CompSensePack/SL0.html#SL0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CompSensePack.SL0.SL0" title="Link to this definition"></a></dt>
+<dd><p>Solves the underdetermined system <cite>A &#64; s = y</cite> for the sparsest vector <cite>s</cite> using the Smoothed L0 (SL0) algorithm.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>y<span class="classifier">numpy.ndarray</span></dt><dd><p>The observed vector (Mx1), where M is the number of rows in <cite>A</cite>.</p>
+</dd>
+<dt>A<span class="classifier">numpy.ndarray</span></dt><dd><p>The measurement matrix (MxN), which should be ‘wide’, meaning N &gt; M (more columns than rows).</p>
+</dd>
+<dt>sigma_min<span class="classifier">float</span></dt><dd><p>The minimum value of <cite>sigma</cite>, controlling when the algorithm terminates.</p>
+</dd>
+<dt>sigma_decrease_factor<span class="classifier">float, optional (default=0.5)</span></dt><dd><p>Factor by which <cite>sigma</cite> is reduced in each iteration.</p>
+</dd>
+<dt>mu_0<span class="classifier">float, optional (default=2)</span></dt><dd><p>Scaling factor for <cite>mu</cite>, where <cite>mu = mu_0 * sigma^2</cite>. Controls convergence rate.</p>
+</dd>
+<dt>L<span class="classifier">int, optional (default=3)</span></dt><dd><p>Number of iterations for the inner loop (steepest descent).</p>
+</dd>
+<dt>A_pinv<span class="classifier">numpy.ndarray, optional</span></dt><dd><p>Precomputed pseudoinverse of <cite>A</cite> (MxN). If not provided, it will be computed internally.</p>
+</dd>
+<dt>showProgress<span class="classifier">bool, optional (default=False)</span></dt><dd><p>If True, prints the value of <cite>sigma</cite> during iterations.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>s<span class="classifier">numpy.ndarray</span></dt><dd><p>The estimated sparse signal (Nx1) that best satisfies <cite>A &#64; s = y</cite>.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The algorithm begins by initializing <cite>s</cite> using the pseudoinverse of <cite>A</cite>.</p></li>
+<li><p>It iteratively adjusts <cite>s</cite> to reduce the L0-norm by applying a Gaussian smoothing kernel.</p></li>
+<li><p>The process continues until <cite>sigma</cite> reaches <cite>sigma_min</cite>, with <cite>sigma</cite> being reduced geometrically.</p></li>
+</ul>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>  <span class="c1"># Random wide matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>       <span class="c1"># Random observation vector</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SL0</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Recovered sparse signal:&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="comp_sense_class.html" class="btn btn-neutral float-left" title="Compressed Sensing Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Francesco Rosnati.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

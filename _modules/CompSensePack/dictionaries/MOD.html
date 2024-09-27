@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CompSensePack.dictionaries.MOD &mdash; Ecg Compressed Sensing with Kronecker Technique &amp; Adaptive Dictionary Learning 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../CompSensePack.html">CompSensePack Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ecg Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">CompSensePack.dictionaries.MOD</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for CompSensePack.dictionaries.MOD</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">MOD.py - Method of Optimal Directions (MOD) algorithm for dictionary learning.</span>
+
+<span class="sd">This module implements the MOD algorithm, which is used for learning a dictionary for sparse coding.</span>
+<span class="sd">It includes utility functions to measure the distance between dictionaries and to learn a dictionary</span>
+<span class="sd">that can sparsely represent a set of signals using the OMP algorithm.</span>
+
+<span class="sd">Example usage:</span>
+<span class="sd">--------------</span>
+<span class="sd">&gt;&gt;&gt; from MOD import MOD, I_findDistanceBetweenDictionaries</span>
+<span class="sd">&gt;&gt;&gt; data = np.random.randn(100, 200)  # Random signals</span>
+<span class="sd">&gt;&gt;&gt; params = {&#39;K&#39;: 50, &#39;num_iterations&#39;: 10, &#39;initialization_method&#39;: &#39;DataElements&#39;, &#39;L&#39;: 5}</span>
+<span class="sd">&gt;&gt;&gt; dictionary, coefficients = MOD(data, params)</span>
+
+<span class="sd">&gt;&gt;&gt; # Distance between original and updated dictionary</span>
+<span class="sd">&gt;&gt;&gt; ratio, total_distance = I_findDistanceBetweenDictionaries(dictionary, new_dictionary)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># system imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">solve</span>
+<span class="kn">from</span> <span class="nn">.OMP</span> <span class="kn">import</span> <span class="n">OMP</span>  <span class="c1"># Import OMP algorithm from the OMP module</span>
+
+<div class="viewcode-block" id="I_findDistanceBetweenDictionaries">
+<a class="viewcode-back" href="../../../dictionaries/MOD.html#CompSensePack.dictionaries.MOD.I_findDistanceBetweenDictionaries">[docs]</a>
+<span class="k">def</span> <span class="nf">I_findDistanceBetweenDictionaries</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the distance between two dictionaries.</span>
+
+<span class="sd">    This function compares two dictionaries by calculating the number of columns </span>
+<span class="sd">    that have a very low error between the original and the new dictionary.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    original : numpy.ndarray</span>
+<span class="sd">        The original dictionary.</span>
+<span class="sd">    </span>
+<span class="sd">    new : numpy.ndarray</span>
+<span class="sd">        The new dictionary.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ratio : float</span>
+<span class="sd">        The ratio of dictionary elements with a small error (i.e., those that </span>
+<span class="sd">        satisfy the condition `errorOfElement &lt; 0.01`).</span>
+<span class="sd">    </span>
+<span class="sd">    totalDistances : float</span>
+<span class="sd">        The sum of all error values between the original and new dictionary elements.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The function modifies the new dictionary to ensure that each column starts </span>
+<span class="sd">      with a positive value (consistent with the original dictionary).</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; original_dict = np.random.randn(100, 50)</span>
+<span class="sd">    &gt;&gt;&gt; new_dict = np.random.randn(100, 50)</span>
+<span class="sd">    &gt;&gt;&gt; ratio, total_distance = I_findDistanceBetweenDictionaries(original_dict, new_dict)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">catchCounter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">totalDistances</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Ensure columns in new dictionary start with positive values</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">new</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">new</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">new</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">original</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">original</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">original</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">new</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">new</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
+        <span class="n">errorOfElement</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">new</span><span class="p">[:,</span> <span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">d</span><span class="p">)</span>
+        <span class="n">totalDistances</span> <span class="o">+=</span> <span class="n">errorOfElement</span>
+        <span class="n">catchCounter</span> <span class="o">+=</span> <span class="n">errorOfElement</span> <span class="o">&lt;</span> <span class="mf">0.01</span>
+
+    <span class="n">ratio</span> <span class="o">=</span> <span class="n">catchCounter</span> <span class="o">/</span> <span class="n">original</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">totalDistances</span></div>
+
+
+
+<div class="viewcode-block" id="MOD">
+<a class="viewcode-back" href="../../../dictionaries/MOD.html#CompSensePack.dictionaries.MOD.MOD">[docs]</a>
+<span class="k">def</span> <span class="nf">MOD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method of Optimal Directions (MOD) algorithm for dictionary learning.</span>
+
+<span class="sd">    The MOD algorithm is a method for learning a dictionary for sparse representation of signals.</span>
+<span class="sd">    It iteratively updates the dictionary to best represent the input data with sparse coefficients</span>
+<span class="sd">    using the Orthogonal Matching Pursuit (OMP) algorithm.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : numpy.ndarray</span>
+<span class="sd">        An (n x N) matrix containing N signals, each of dimension n.</span>
+<span class="sd">    </span>
+<span class="sd">    parameters : dict</span>
+<span class="sd">        A dictionary containing the parameters for the MOD algorithm:</span>
+<span class="sd">            - K : int</span>
+<span class="sd">                The number of dictionary elements (columns) to train.</span>
+<span class="sd">            </span>
+<span class="sd">            - num_iterations : int</span>
+<span class="sd">                The number of iterations to perform for dictionary learning.</span>
+<span class="sd">            </span>
+<span class="sd">            - initialization_method : str</span>
+<span class="sd">                Method to initialize the dictionary. Options are:</span>
+<span class="sd">                * &#39;DataElements&#39; - Initializes the dictionary using the first K data signals.</span>
+<span class="sd">                * &#39;GivenMatrix&#39; - Initializes the dictionary using a provided matrix </span>
+<span class="sd">                  (requires &#39;initial_dictionary&#39; key).</span>
+
+<span class="sd">            - initial_dictionary : numpy.ndarray, optional</span>
+<span class="sd">                The initial dictionary matrix to use if &#39;initialization_method&#39; is </span>
+<span class="sd">                set to &#39;GivenMatrix&#39;. It should be of size (n x K).</span>
+
+<span class="sd">            - L : int</span>
+<span class="sd">                The number of non-zero coefficients to use in OMP for sparse</span>
+<span class="sd">                representation of each signal.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dictionary : numpy.ndarray</span>
+<span class="sd">        The trained dictionary of size (n x K), where each column is a dictionary element.</span>
+
+<span class="sd">    coef_matrix : numpy.ndarray</span>
+<span class="sd">        The coefficient matrix of size (K x N), representing the sparse representation</span>
+<span class="sd">        of the input data using the trained dictionary.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The dictionary is initialized either from the data signals or from a provided matrix.</span>
+<span class="sd">    - The OMP algorithm is used to solve the sparse coding step at each iteration.</span>
+<span class="sd">    - The algorithm iteratively refines the dictionary by solving a least squares problem.</span>
+<span class="sd">    - The columns of the dictionary are normalized to unit norm and positive first elements.</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; data = np.random.randn(100, 200)</span>
+<span class="sd">    &gt;&gt;&gt; params = {&#39;K&#39;: 50, &#39;num_iterations&#39;: 10, &#39;initialization_method&#39;: &#39;DataElements&#39;, &#39;L&#39;: 5}</span>
+<span class="sd">    &gt;&gt;&gt; dictionary, coefficients = MOD(data, params)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># Check if the number of signals is smaller than the dictionary size</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MOD: number of training signals is smaller than the dictionary size. Returning trivial solution...&quot;</span><span class="p">)</span>
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">coef_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># Trivial coefficients</span>
+        <span class="k">return</span> <span class="n">dictionary</span><span class="p">,</span> <span class="n">coef_matrix</span>
+
+    <span class="c1"># Initialize dictionary based on the specified method</span>
+    <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;initialization_method&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;DataElements&#39;</span><span class="p">:</span>
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">]]</span>
+    <span class="k">elif</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;initialization_method&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;GivenMatrix&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;initial_dictionary&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;initial_dictionary parameter is required when &quot;</span>
+                             <span class="s2">&quot;initialization_method is set to &#39;GivenMatrix&#39;.&quot;</span><span class="p">)</span>
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;initial_dictionary&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Invalid value for initialization_method. Choose &#39;DataElements&#39; or &#39;GivenMatrix&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Convert to float64 for precision</span>
+    <span class="n">dictionary</span> <span class="o">=</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># Normalize dictionary columns and avoid division by zero</span>
+    <span class="n">column_norms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">column_norms</span><span class="p">[</span><span class="n">column_norms</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Prevent division by zero</span>
+    <span class="n">dictionary</span> <span class="o">/=</span> <span class="n">column_norms</span>
+
+    <span class="c1"># Ensure positive first elements</span>
+    <span class="n">dictionary</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">dictionary</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+
+    <span class="n">prev_dictionary</span> <span class="o">=</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Run MOD algorithm</span>
+    <span class="k">for</span> <span class="n">iter_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;num_iterations&#39;</span><span class="p">]):</span>
+        <span class="c1"># Step 1: Sparse coding using OMP</span>
+        <span class="n">coef_matrix</span> <span class="o">=</span> <span class="n">OMP</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">])</span>
+
+        <span class="c1"># Step 2: Update the dictionary</span>
+        <span class="n">regularization_term</span> <span class="o">=</span> <span class="mf">1e-7</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">coef_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">matrix_a</span> <span class="o">=</span> <span class="n">coef_matrix</span> <span class="o">@</span> <span class="n">coef_matrix</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">regularization_term</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+
+        <span class="c1"># Use pinv for numerical stability: &quot;lstsq&quot; or &quot;regularizations&quot; could also work</span>
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="n">data</span> <span class="o">@</span> <span class="n">coef_matrix</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">matrix_a</span><span class="p">)</span>
+
+        <span class="c1"># Normalize dictionary columns and avoid division by zero</span>
+        <span class="n">column_norms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">column_norms</span><span class="p">[</span><span class="n">column_norms</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Prevent division by zero</span>
+        <span class="n">dictionary</span> <span class="o">/=</span> <span class="n">column_norms</span>
+
+        <span class="c1"># Ensure positive first elements</span>
+        <span class="n">dictionary</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">dictionary</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+
+        <span class="c1"># Convergence check</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dictionary</span> <span class="o">-</span> <span class="n">prev_dictionary</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-5</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MOD converged after </span><span class="si">{</span><span class="n">iter_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> iterations.&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+
+        <span class="n">prev_dictionary</span> <span class="o">=</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">dictionary</span><span class="p">,</span> <span class="n">coef_matrix</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Francesco Rosnati.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
