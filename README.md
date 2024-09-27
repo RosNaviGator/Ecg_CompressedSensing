@@ -1,6 +1,6 @@
 # ECG Compressed Sensing with Kronecker Technique & Adaptive Dictionary Learning
 
-__Date:__ September 10, 2024
+__Date:__ September 2024
 
 __Author:__ Francesco Rosnati, HPC Engineering Master's student at Politecnico di Milano
 
