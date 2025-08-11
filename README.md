@@ -73,7 +73,7 @@ The **Kronecker technique** is used in this project to exploit the sparsity stru
 
 ## Code Overview
 
-### Refer to the [Official Documentation Website](https://rosnavigator.github.io/NAML_ECG_compressor/) for more in depth description.
+### Refer to the [Official Documentation Website](https://rosnavigator.github.io/Ecg_CompressedSensing/) for more in depth description.
 
 ### [CompSensePack](./CompSensePack/)
 
